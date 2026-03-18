@@ -123,6 +123,47 @@ struct ImportedDeckedBuilderInsights {
     let legacyIOSActiveDevices90DayAverage: Double?
     let notes: [String]
 
+    struct CoverageItem: Identifiable {
+        let title: String
+        let isImported: Bool
+
+        var id: String { title }
+    }
+
+    private var coveredMetricCount: Int {
+        [
+            activeSubscribers != nil,
+            trailing12MonthProceeds != nil,
+            legacyLifetimeDownloads != nil,
+            legacyIOSActiveDevices30DayAverage != nil
+        ]
+        .filter { $0 }
+        .count
+    }
+
+    var coreCoverageTotalCount: Int { 4 }
+
+    var coreCoverageRatio: Double {
+        Double(coveredMetricCount) / Double(coreCoverageTotalCount)
+    }
+
+    var coreCoveragePercent: Int {
+        Int((coreCoverageRatio * 100).rounded())
+    }
+
+    var coreCoverageSummary: String {
+        "\(coveredMetricCount) of \(coreCoverageTotalCount) core Decked Builder metrics are currently coming from imported reports."
+    }
+
+    var coverageItems: [CoverageItem] {
+        [
+            CoverageItem(title: "Active subscribers", isImported: activeSubscribers != nil),
+            CoverageItem(title: "Trailing 12-month proceeds", isImported: trailing12MonthProceeds != nil),
+            CoverageItem(title: "Legacy lifetime downloads", isImported: legacyLifetimeDownloads != nil),
+            CoverageItem(title: "Legacy iOS active devices", isImported: legacyIOSActiveDevices30DayAverage != nil)
+        ]
+    }
+
     var hasUsefulData: Bool {
         activeSubscribers != nil ||
         trailing12MonthProceeds != nil ||

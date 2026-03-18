@@ -104,6 +104,12 @@ struct DashboardOverviewView: View {
                         systemImage: "waveform.path.ecg"
                     )
                     MetricCard(
+                        title: "Decked Coverage",
+                        value: "\(importedInsights.coreCoveragePercent)%",
+                        detail: importedInsights.coreCoverageSummary,
+                        systemImage: "checklist"
+                    )
+                    MetricCard(
                         title: "Launch Target Cash",
                         value: snapshot.funding.targetCash, format: .currency(code: "USD"),
                         detail: "Current recommended target for a healthier founder-led store launch.",
@@ -145,6 +151,19 @@ struct DashboardOverviewView: View {
                         }
                         .font(.subheadline)
                     }
+                }
+
+                SectionCard(title: "Coverage Breakdown", subtitle: "Which core metrics are imported right now") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        ForEach(importedInsights.coverageItems) { item in
+                            Label(
+                                item.title,
+                                systemImage: item.isImported ? "checkmark.circle.fill" : "circle.dashed"
+                            )
+                            .foregroundStyle(item.isImported ? .green : .secondary)
+                        }
+                    }
+                    .font(.subheadline)
                 }
 
                 HStack(alignment: .top, spacing: 20) {
