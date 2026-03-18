@@ -31,7 +31,9 @@ struct FounderDashboardRootView: View {
                     launchCashReality: $model.launchCashReality,
                     launchChecklistTasks: model.launchChecklistTasks,
                     completedTaskIDs: model.completedLaunchChecklistTaskIDs,
-                    onToggleTask: model.toggleLaunchChecklistTask(_:)
+                    onToggleTask: model.toggleLaunchChecklistTask(_:),
+                    siteStatus: model.sitePipelineStatus(for:),
+                    onSetSiteStatus: model.setSitePipelineStatus(_:for:)
                 )
             case .imports:
                 ImportsView(model: model)

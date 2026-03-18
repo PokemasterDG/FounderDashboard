@@ -24,6 +24,7 @@ enum ImportFocus: String, Hashable, Identifiable {
 final class AppModel {
     private static let completedChecklistDefaultsKey = "FounderDashboard.completedLaunchChecklistTaskIDs"
     private static let cashRealityDefaultsKey = "FounderDashboard.launchCashReality"
+    private static let siteStatusesDefaultsKey = "FounderDashboard.sitePipelineStatuses"
 
     enum Section: String, CaseIterable, Hashable, Identifiable {
         case dashboard
@@ -65,6 +66,11 @@ final class AppModel {
     var importStatusMessage: String?
     var importFocus: ImportFocus?
     var completedLaunchChecklistTaskIDs: Set<String>
+    var sitePipelineStatuses: [String: SitePipelineStatus] {
+        didSet {
+            persistSitePipelineStatuses()
+        }
+    }
     var launchCashReality: LaunchCashReality {
         didSet {
             persistLaunchCashReality()
@@ -89,6 +95,7 @@ final class AppModel {
         self.completedLaunchChecklistTaskIDs = Set(
             UserDefaults.standard.stringArray(forKey: Self.completedChecklistDefaultsKey) ?? []
         )
+        self.sitePipelineStatuses = Self.loadSitePipelineStatuses()
         self.launchCashReality = Self.loadLaunchCashReality()
         self.importedDeckedBuilderInsights = ImportedReportAnalyzer.analyze(
             self.importedReports,
@@ -144,6 +151,14 @@ final class AppModel {
         )
     }
 
+    func sitePipelineStatus(for candidate: SiteCandidate) -> SitePipelineStatus {
+        sitePipelineStatuses[candidate.name] ?? .active
+    }
+
+    func setSitePipelineStatus(_ status: SitePipelineStatus, for candidate: SiteCandidate) {
+        sitePipelineStatuses[candidate.name] = status
+    }
+
     private func refreshImportedInsights() {
         importedDeckedBuilderInsights = ImportedReportAnalyzer.analyze(
             importedReports,
@@ -166,6 +181,23 @@ final class AppModel {
         }
 
         UserDefaults.standard.set(data, forKey: Self.cashRealityDefaultsKey)
+    }
+
+    private static func loadSitePipelineStatuses() -> [String: SitePipelineStatus] {
+        guard let data = UserDefaults.standard.data(forKey: siteStatusesDefaultsKey),
+              let decoded = try? JSONDecoder().decode([String: SitePipelineStatus].self, from: data) else {
+            return [:]
+        }
+
+        return decoded
+    }
+
+    private func persistSitePipelineStatuses() {
+        guard let data = try? JSONEncoder().encode(sitePipelineStatuses) else {
+            return
+        }
+
+        UserDefaults.standard.set(data, forKey: Self.siteStatusesDefaultsKey)
     }
 }
 

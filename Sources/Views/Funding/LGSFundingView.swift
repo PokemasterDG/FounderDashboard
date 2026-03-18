@@ -7,6 +7,8 @@ struct LGSFundingView: View {
     let launchChecklistTasks: [LaunchChecklistTask]
     let completedTaskIDs: Set<String>
     let onToggleTask: (LaunchChecklistTask) -> Void
+    let siteStatus: (SiteCandidate) -> SitePipelineStatus
+    let onSetSiteStatus: (SitePipelineStatus, SiteCandidate) -> Void
 
     private var columns: [GridItem] {
         [GridItem(.adaptive(minimum: 220), spacing: 16)]
@@ -51,13 +53,17 @@ struct LGSFundingView: View {
         launchCashReality: Binding<LaunchCashReality> = .constant(.empty),
         launchChecklistTasks: [LaunchChecklistTask] = [],
         completedTaskIDs: Set<String> = [],
-        onToggleTask: @escaping (LaunchChecklistTask) -> Void = { _ in }
+        onToggleTask: @escaping (LaunchChecklistTask) -> Void = { _ in },
+        siteStatus: @escaping (SiteCandidate) -> SitePipelineStatus = { _ in .active },
+        onSetSiteStatus: @escaping (SitePipelineStatus, SiteCandidate) -> Void = { _, _ in }
     ) {
         self.snapshot = snapshot
         self._launchCashReality = launchCashReality
         self.launchChecklistTasks = launchChecklistTasks
         self.completedTaskIDs = completedTaskIDs
         self.onToggleTask = onToggleTask
+        self.siteStatus = siteStatus
+        self.onSetSiteStatus = onSetSiteStatus
     }
 
     var body: some View {
@@ -225,6 +231,20 @@ struct LGSFundingView: View {
                                         Text(candidate.name)
                                             .font(.headline)
                                         Spacer()
+                                        Menu {
+                                            ForEach(SitePipelineStatus.allCases) { status in
+                                                Button {
+                                                    onSetSiteStatus(status, candidate)
+                                                } label: {
+                                                    Label(status.title, systemImage: status.systemImage)
+                                                }
+                                            }
+                                        } label: {
+                                            Label(siteStatus(candidate).title, systemImage: siteStatus(candidate).systemImage)
+                                                .font(.caption.weight(.semibold))
+                                        }
+                                        .menuStyle(.borderlessButton)
+
                                         Text(candidate.score.formatted(.number.precision(.fractionLength(1))))
                                             .foregroundStyle(.secondary)
                                     }

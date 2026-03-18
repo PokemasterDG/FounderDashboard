@@ -1,5 +1,6 @@
 import SwiftUI
 
+#if os(macOS)
 @main
 struct FounderDashboardApp: App {
     @State private var model = AppModel()
@@ -12,3 +13,4 @@ struct FounderDashboardApp: App {
         .defaultSize(width: 1320, height: 860)
     }
 }
+#endif

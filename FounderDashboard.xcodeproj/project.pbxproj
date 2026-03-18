@@ -7,24 +7,48 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		002C91EB2D67DB6AA6138575 /* CompanionSitesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E60D715B06FB853C1167A3 /* CompanionSitesView.swift */; };
+		0BE709AE0C603C11ECF41745 /* DataStatusCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5231583E943F9099781D411 /* DataStatusCard.swift */; };
+		0DD79B786CECFC3CED53F647 /* CompanionSitesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E60D715B06FB853C1167A3 /* CompanionSitesView.swift */; };
 		1E0FFEA1A9F6770D922F45E5 /* SourcesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C80AEB5AE5E0DD143D79695 /* SourcesView.swift */; };
+		1E93703196C2E73EAA554047 /* DashboardOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF2F67838247EA209097BF4 /* DashboardOverviewView.swift */; };
+		20F11A72D9D3BEFB2A1DCA25 /* FounderDashboardCompanionRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA04E241679B828CCAE8A0D7 /* FounderDashboardCompanionRootView.swift */; };
 		25C3B8A17D13D737D4E6D417 /* SectionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E7887449FFC147A57824B4 /* SectionCard.swift */; };
 		278A69CAAC0FE32256B9DD58 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CFD5C6054A871EE3623422 /* AppModel.swift */; };
+		4E116F462F43F7155DABF187 /* FounderDashboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17922574AE2584BF5691FA67 /* FounderDashboardApp.swift */; };
 		4E5766CD2350D8A21AAF3CD5 /* ImportedReportAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129E411011210D7C40685C33 /* ImportedReportAnalyzer.swift */; };
 		4EA605F64E1D2AF6E37B5C79 /* DeckedBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9478828EEBBFB1F5357A7A /* DeckedBuilderView.swift */; };
+		4F735DEB712FFFE572E1E866 /* ImportedReportStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADA9B378B9256F1A7B04DFA /* ImportedReportStore.swift */; };
+		5EFE79B3BA3E59698BCC9D3B /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CFD5C6054A871EE3623422 /* AppModel.swift */; };
 		6A48A0E81EA29CD5C7961C0D /* ImportedReportStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADA9B378B9256F1A7B04DFA /* ImportedReportStore.swift */; };
 		6BE71F8C3CAAAE51989004CD /* DataStatusCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5231583E943F9099781D411 /* DataStatusCard.swift */; };
+		6FA8D79D48B89A39C19864C5 /* CompanionDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8B8F2BD5403E7BDD00F2BC /* CompanionDashboardView.swift */; };
+		75348C3CCDF7895230B18575 /* PlanningSnapshotLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E274246EDF890D5A1E6D704 /* PlanningSnapshotLoader.swift */; };
 		86F29E9A50806D590B042293 /* DocumentOpening.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF957E6D010012E81A98C984 /* DocumentOpening.swift */; };
 		98344310FECAD8C0936D6B7A /* FounderDashboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17922574AE2584BF5691FA67 /* FounderDashboardApp.swift */; };
+		99F5DA961E8CA95236FABCB4 /* SectionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E7887449FFC147A57824B4 /* SectionCard.swift */; };
 		9A730808D9C1752C84324D2B /* PlanningSnapshotLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E274246EDF890D5A1E6D704 /* PlanningSnapshotLoader.swift */; };
+		A0F790C497FB0E5DEEC33365 /* CompanionDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8B8F2BD5403E7BDD00F2BC /* CompanionDashboardView.swift */; };
 		A2C1A8A5D130A8D4ACCA67A9 /* LGSFundingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472DCE5FA25E79F024B770D6 /* LGSFundingView.swift */; };
+		A6BC25775AA67797EFD345DE /* FounderDashboardCompanionRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA04E241679B828CCAE8A0D7 /* FounderDashboardCompanionRootView.swift */; };
 		A7B3CD7284EC94E405DF475F /* FounderDashboardRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C42A2ECEF00DEC2AB180599 /* FounderDashboardRootView.swift */; };
+		A890F9A10595D1789BD8AF97 /* planning_snapshot.json in Resources */ = {isa = PBXBuildFile; fileRef = B4B38FF0B6115FE3A2B9B57C /* planning_snapshot.json */; };
+		AA5C9AF3E2F08372410BAFDC /* CompanionChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59946DBB0F7F7AF6A5189F9 /* CompanionChecklistView.swift */; };
+		AA7BC3AADC3B4C77F076F43A /* LGSFundingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472DCE5FA25E79F024B770D6 /* LGSFundingView.swift */; };
+		AA9CB1309F3708D2C46BD82F /* CompanionChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59946DBB0F7F7AF6A5189F9 /* CompanionChecklistView.swift */; };
+		B12A4D884B70DD4880E656D5 /* FounderDashboardCompanionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6820C6F88F6A3E6BDF3BCF /* FounderDashboardCompanionApp.swift */; };
+		B2D21F1CEF60953B204484D6 /* MetricCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BB82727A477231A9CF0CFD /* MetricCard.swift */; };
 		B7CA5CCDB0EC40FD163C2E2C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0663B2479CF10A766E698BDE /* Assets.xcassets */; };
+		BA036F1D843A22BAD8A4D708 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0663B2479CF10A766E698BDE /* Assets.xcassets */; };
+		BAA658FA0DC873112F786568 /* PlanningModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199364DD38886ACC660AE530 /* PlanningModels.swift */; };
 		BD5A3B38BA5BDA91DA3DB0B1 /* ImportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C6B257DC20F88FA94211CD /* ImportsView.swift */; };
+		BDC2FCC0BA72AF4B6FF1A5E5 /* DeckedBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9478828EEBBFB1F5357A7A /* DeckedBuilderView.swift */; };
 		C24B2CFCA1A8C7FEA90E08DC /* DashboardOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF2F67838247EA209097BF4 /* DashboardOverviewView.swift */; };
+		C29E43AB039BFFA90B6751A6 /* FounderDashboardCompanionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6820C6F88F6A3E6BDF3BCF /* FounderDashboardCompanionApp.swift */; };
 		CF2402DEB96D6373955DF4D3 /* DocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D23D13EB8724799F8483F20 /* DocumentsView.swift */; };
 		E77A3FCCCF988C440742F001 /* MetricCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BB82727A477231A9CF0CFD /* MetricCard.swift */; };
 		ED2DADDCC01496AFBE6428CB /* planning_snapshot.json in Resources */ = {isa = PBXBuildFile; fileRef = B4B38FF0B6115FE3A2B9B57C /* planning_snapshot.json */; };
+		F01DFA1B687A9385FD510655 /* ImportedReportAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129E411011210D7C40685C33 /* ImportedReportAnalyzer.swift */; };
 		F4BF124281C7C0C78C0C4EE1 /* PlanningModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199364DD38886ACC660AE530 /* PlanningModels.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,8 +61,11 @@
 		20E7887449FFC147A57824B4 /* SectionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionCard.swift; sourceTree = "<group>"; };
 		28CFD5C6054A871EE3623422 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		2C80AEB5AE5E0DD143D79695 /* SourcesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourcesView.swift; sourceTree = "<group>"; };
+		37E7A876802CF21579BC5565 /* FounderDashboard Companion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FounderDashboard Companion.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E274246EDF890D5A1E6D704 /* PlanningSnapshotLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanningSnapshotLoader.swift; sourceTree = "<group>"; };
 		472DCE5FA25E79F024B770D6 /* LGSFundingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LGSFundingView.swift; sourceTree = "<group>"; };
+		4D8B8F2BD5403E7BDD00F2BC /* CompanionDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionDashboardView.swift; sourceTree = "<group>"; };
+		66E60D715B06FB853C1167A3 /* CompanionSitesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionSitesView.swift; sourceTree = "<group>"; };
 		6C42A2ECEF00DEC2AB180599 /* FounderDashboardRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FounderDashboardRootView.swift; sourceTree = "<group>"; };
 		6DC8736A2A8E52A7C69713D6 /* FounderDashboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FounderDashboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D9478828EEBBFB1F5357A7A /* DeckedBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckedBuilderView.swift; sourceTree = "<group>"; };
@@ -48,9 +75,12 @@
 		B0C6B257DC20F88FA94211CD /* ImportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportsView.swift; sourceTree = "<group>"; };
 		B4B38FF0B6115FE3A2B9B57C /* planning_snapshot.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = planning_snapshot.json; sourceTree = "<group>"; };
 		BF957E6D010012E81A98C984 /* DocumentOpening.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentOpening.swift; sourceTree = "<group>"; };
+		CA04E241679B828CCAE8A0D7 /* FounderDashboardCompanionRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FounderDashboardCompanionRootView.swift; sourceTree = "<group>"; };
+		CC6820C6F88F6A3E6BDF3BCF /* FounderDashboardCompanionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FounderDashboardCompanionApp.swift; sourceTree = "<group>"; };
 		CD4EB6B65DA6103A734CE558 /* sources_acknowledgements.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = sources_acknowledgements.md; sourceTree = "<group>"; };
 		D8BB82727A477231A9CF0CFD /* MetricCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricCard.swift; sourceTree = "<group>"; };
 		F5231583E943F9099781D411 /* DataStatusCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStatusCard.swift; sourceTree = "<group>"; };
+		F59946DBB0F7F7AF6A5189F9 /* CompanionChecklistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionChecklistView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -66,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				6DC8736A2A8E52A7C69713D6 /* FounderDashboard.app */,
+				37E7A876802CF21579BC5565 /* FounderDashboard Companion.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -76,6 +107,16 @@
 				472DCE5FA25E79F024B770D6 /* LGSFundingView.swift */,
 			);
 			path = Funding;
+			sourceTree = "<group>";
+		};
+		2D0BCD5DBD73595705790F2C /* Companion */ = {
+			isa = PBXGroup;
+			children = (
+				F59946DBB0F7F7AF6A5189F9 /* CompanionChecklistView.swift */,
+				4D8B8F2BD5403E7BDD00F2BC /* CompanionDashboardView.swift */,
+				66E60D715B06FB853C1167A3 /* CompanionSitesView.swift */,
+			);
+			path = Companion;
 			sourceTree = "<group>";
 		};
 		4BD1A6552745CFF72F475AB5 /* Resources */ = {
@@ -132,6 +173,7 @@
 		AC76DD509300B55B324D2DEF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2D0BCD5DBD73595705790F2C /* Companion */,
 				705A75626B33440EE6B958C5 /* Components */,
 				FEF57F2DC8DDE7F1D97E8B11 /* Dashboard */,
 				C10FC560516E1E3A56726D9C /* Decked */,
@@ -154,6 +196,8 @@
 			children = (
 				28CFD5C6054A871EE3623422 /* AppModel.swift */,
 				17922574AE2584BF5691FA67 /* FounderDashboardApp.swift */,
+				CC6820C6F88F6A3E6BDF3BCF /* FounderDashboardCompanionApp.swift */,
+				CA04E241679B828CCAE8A0D7 /* FounderDashboardCompanionRootView.swift */,
 				6C42A2ECEF00DEC2AB180599 /* FounderDashboardRootView.swift */,
 			);
 			path = App;
@@ -207,6 +251,24 @@
 			productReference = 6DC8736A2A8E52A7C69713D6 /* FounderDashboard.app */;
 			productType = "com.apple.product-type.application";
 		};
+		969827973DECD9FF3020FB13 /* FounderDashboardCompanion */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E67C1472B7D2559264241AB2 /* Build configuration list for PBXNativeTarget "FounderDashboardCompanion" */;
+			buildPhases = (
+				28EEE427E3A5180A694D55C3 /* Sources */,
+				8D8069F1117B8435B48E41DA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FounderDashboardCompanion;
+			packageProductDependencies = (
+			);
+			productName = FounderDashboardCompanion;
+			productReference = 37E7A876802CF21579BC5565 /* FounderDashboard Companion.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -218,6 +280,9 @@
 				TargetAttributes = {
 					0CE1AF0588B104910BEE812C = {
 						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					969827973DECD9FF3020FB13 = {
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -237,6 +302,7 @@
 			projectRoot = "";
 			targets = (
 				0CE1AF0588B104910BEE812C /* FounderDashboard */,
+				969827973DECD9FF3020FB13 /* FounderDashboardCompanion */,
 			);
 		};
 /* End PBXProject section */
@@ -251,20 +317,58 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8D8069F1117B8435B48E41DA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA036F1D843A22BAD8A4D708 /* Assets.xcassets in Resources */,
+				A890F9A10595D1789BD8AF97 /* planning_snapshot.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		28EEE427E3A5180A694D55C3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EFE79B3BA3E59698BCC9D3B /* AppModel.swift in Sources */,
+				AA9CB1309F3708D2C46BD82F /* CompanionChecklistView.swift in Sources */,
+				A0F790C497FB0E5DEEC33365 /* CompanionDashboardView.swift in Sources */,
+				0DD79B786CECFC3CED53F647 /* CompanionSitesView.swift in Sources */,
+				1E93703196C2E73EAA554047 /* DashboardOverviewView.swift in Sources */,
+				0BE709AE0C603C11ECF41745 /* DataStatusCard.swift in Sources */,
+				BDC2FCC0BA72AF4B6FF1A5E5 /* DeckedBuilderView.swift in Sources */,
+				4E116F462F43F7155DABF187 /* FounderDashboardApp.swift in Sources */,
+				C29E43AB039BFFA90B6751A6 /* FounderDashboardCompanionApp.swift in Sources */,
+				A6BC25775AA67797EFD345DE /* FounderDashboardCompanionRootView.swift in Sources */,
+				F01DFA1B687A9385FD510655 /* ImportedReportAnalyzer.swift in Sources */,
+				4F735DEB712FFFE572E1E866 /* ImportedReportStore.swift in Sources */,
+				AA7BC3AADC3B4C77F076F43A /* LGSFundingView.swift in Sources */,
+				B2D21F1CEF60953B204484D6 /* MetricCard.swift in Sources */,
+				BAA658FA0DC873112F786568 /* PlanningModels.swift in Sources */,
+				75348C3CCDF7895230B18575 /* PlanningSnapshotLoader.swift in Sources */,
+				99F5DA961E8CA95236FABCB4 /* SectionCard.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		80566FE5C194C5E8794991DD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				278A69CAAC0FE32256B9DD58 /* AppModel.swift in Sources */,
+				AA5C9AF3E2F08372410BAFDC /* CompanionChecklistView.swift in Sources */,
+				6FA8D79D48B89A39C19864C5 /* CompanionDashboardView.swift in Sources */,
+				002C91EB2D67DB6AA6138575 /* CompanionSitesView.swift in Sources */,
 				C24B2CFCA1A8C7FEA90E08DC /* DashboardOverviewView.swift in Sources */,
 				6BE71F8C3CAAAE51989004CD /* DataStatusCard.swift in Sources */,
 				4EA605F64E1D2AF6E37B5C79 /* DeckedBuilderView.swift in Sources */,
 				86F29E9A50806D590B042293 /* DocumentOpening.swift in Sources */,
 				CF2402DEB96D6373955DF4D3 /* DocumentsView.swift in Sources */,
 				98344310FECAD8C0936D6B7A /* FounderDashboardApp.swift in Sources */,
+				B12A4D884B70DD4880E656D5 /* FounderDashboardCompanionApp.swift in Sources */,
+				20F11A72D9D3BEFB2A1DCA25 /* FounderDashboardCompanionRootView.swift in Sources */,
 				A7B3CD7284EC94E405DF475F /* FounderDashboardRootView.swift in Sources */,
 				4E5766CD2350D8A21AAF3CD5 /* ImportedReportAnalyzer.swift in Sources */,
 				6A48A0E81EA29CD5C7961C0D /* ImportedReportStore.swift in Sources */,
@@ -316,9 +420,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -337,18 +443,42 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = FounderDashboard;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dennisgill.FounderDashboard;
 				PRODUCT_NAME = FounderDashboard;
-				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
+		};
+		43158F8A600539676D0482EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = W8TK8HMXT3;
+				INFOPLIST_KEY_CFBundleDisplayName = "FounderDashboard Companion";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Dennis Gill";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dennisgill.FounderDashboardCompanion;
+				PRODUCT_NAME = "FounderDashboard Companion";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
 		};
 		9BC86FED63C8AA179F19DDF1 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -385,9 +515,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -400,12 +532,13 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = FounderDashboard;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dennisgill.FounderDashboard;
 				PRODUCT_NAME = FounderDashboard;
-				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 6.0;
@@ -418,6 +551,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Dennis Gill";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -429,12 +563,36 @@
 			};
 			name = Release;
 		};
+		D7323149005E988C63EE34C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = W8TK8HMXT3;
+				INFOPLIST_KEY_CFBundleDisplayName = "FounderDashboard Companion";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Dennis Gill";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dennisgill.FounderDashboardCompanion;
+				PRODUCT_NAME = "FounderDashboard Companion";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
 		F0D4AA5C7B1847603B9CD75D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Dennis Gill";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -463,6 +621,15 @@
 			buildConfigurations = (
 				F0D4AA5C7B1847603B9CD75D /* Debug */,
 				CF8EAECD3BBF861075082E13 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E67C1472B7D2559264241AB2 /* Build configuration list for PBXNativeTarget "FounderDashboardCompanion" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D7323149005E988C63EE34C1 /* Debug */,
+				43158F8A600539676D0482EE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

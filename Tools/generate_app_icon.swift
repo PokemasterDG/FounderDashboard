@@ -6,10 +6,14 @@ import UniformTypeIdentifiers
 
 struct IconSize {
     let filename: String
+    let idiom: String
     let points: CGFloat
     let scale: CGFloat
+    let role: String?
 
     var pixels: CGFloat { points * scale }
+    var sizeString: String { "\(Int(points))x\(Int(points))" }
+    var scaleString: String { "\(Int(scale))x" }
 }
 
 let scriptDirectory = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
@@ -20,16 +24,25 @@ let outputDirectory = projectRootDirectory
     .appendingPathComponent("AppIcon.appiconset", isDirectory: true)
 
 let iconSizes = [
-    IconSize(filename: "icon_16x16.png", points: 16, scale: 1),
-    IconSize(filename: "icon_16x16@2x.png", points: 16, scale: 2),
-    IconSize(filename: "icon_32x32.png", points: 32, scale: 1),
-    IconSize(filename: "icon_32x32@2x.png", points: 32, scale: 2),
-    IconSize(filename: "icon_128x128.png", points: 128, scale: 1),
-    IconSize(filename: "icon_128x128@2x.png", points: 128, scale: 2),
-    IconSize(filename: "icon_256x256.png", points: 256, scale: 1),
-    IconSize(filename: "icon_256x256@2x.png", points: 256, scale: 2),
-    IconSize(filename: "icon_512x512.png", points: 512, scale: 1),
-    IconSize(filename: "icon_512x512@2x.png", points: 512, scale: 2),
+    IconSize(filename: "icon_16x16.png", idiom: "mac", points: 16, scale: 1, role: nil),
+    IconSize(filename: "icon_16x16@2x.png", idiom: "mac", points: 16, scale: 2, role: nil),
+    IconSize(filename: "icon_32x32.png", idiom: "mac", points: 32, scale: 1, role: nil),
+    IconSize(filename: "icon_32x32@2x.png", idiom: "mac", points: 32, scale: 2, role: nil),
+    IconSize(filename: "icon_128x128.png", idiom: "mac", points: 128, scale: 1, role: nil),
+    IconSize(filename: "icon_128x128@2x.png", idiom: "mac", points: 128, scale: 2, role: nil),
+    IconSize(filename: "icon_256x256.png", idiom: "mac", points: 256, scale: 1, role: nil),
+    IconSize(filename: "icon_256x256@2x.png", idiom: "mac", points: 256, scale: 2, role: nil),
+    IconSize(filename: "icon_512x512.png", idiom: "mac", points: 512, scale: 1, role: nil),
+    IconSize(filename: "icon_512x512@2x.png", idiom: "mac", points: 512, scale: 2, role: nil),
+    IconSize(filename: "icon_20x20@2x.png", idiom: "iphone", points: 20, scale: 2, role: nil),
+    IconSize(filename: "icon_20x20@3x.png", idiom: "iphone", points: 20, scale: 3, role: nil),
+    IconSize(filename: "icon_29x29@2x.png", idiom: "iphone", points: 29, scale: 2, role: nil),
+    IconSize(filename: "icon_29x29@3x.png", idiom: "iphone", points: 29, scale: 3, role: nil),
+    IconSize(filename: "icon_40x40@2x.png", idiom: "iphone", points: 40, scale: 2, role: nil),
+    IconSize(filename: "icon_40x40@3x.png", idiom: "iphone", points: 40, scale: 3, role: nil),
+    IconSize(filename: "icon_60x60@2x.png", idiom: "iphone", points: 60, scale: 2, role: nil),
+    IconSize(filename: "icon_60x60@3x.png", idiom: "iphone", points: 60, scale: 3, role: nil),
+    IconSize(filename: "icon_1024x1024.png", idiom: "ios-marketing", points: 1024, scale: 1, role: nil),
 ]
 
 func starPath(in rect: CGRect) -> CGPath {
@@ -149,4 +162,36 @@ for icon in iconSizes {
         fputs("Failed to write \(destination.path): \(error)\n", stderr)
         exit(1)
     }
+}
+
+let contents = [
+    "images": iconSizes.map { icon in
+        var imageEntry: [String: String] = [
+            "filename": icon.filename,
+            "idiom": icon.idiom,
+            "scale": icon.scaleString,
+            "size": icon.sizeString,
+        ]
+
+        if let role = icon.role {
+            imageEntry["role"] = role
+        }
+
+        return imageEntry
+    },
+    "info": [
+        "author": "xcode",
+        "version": 1,
+    ],
+] as [String: Any]
+
+let contentsURL = outputDirectory.appendingPathComponent("Contents.json")
+
+do {
+    let contentsData = try JSONSerialization.data(withJSONObject: contents, options: [.prettyPrinted, .sortedKeys])
+    try contentsData.write(to: contentsURL)
+    print("Wrote \(contentsURL.path)")
+} catch {
+    fputs("Failed to write \(contentsURL.path): \(error)\n", stderr)
+    exit(1)
 }

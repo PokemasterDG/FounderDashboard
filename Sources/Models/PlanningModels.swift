@@ -68,6 +68,30 @@ struct SiteCandidate: Decodable, Identifiable {
     var id: String { name }
 }
 
+enum SitePipelineStatus: String, Codable, CaseIterable, Identifiable {
+    case active
+    case toured
+    case dead
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .active: "Active"
+        case .toured: "Toured"
+        case .dead: "Dead"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .active: "bolt.circle"
+        case .toured: "car.circle"
+        case .dead: "xmark.circle"
+        }
+    }
+}
+
 struct FundingScenario: Decodable, Identifiable {
     let name: String
     let totalCash: Double

@@ -3,6 +3,7 @@ options:
   minimumXcodeGenVersion: 2.39.0
   deploymentTarget:
     macOS: "26.0"
+    iOS: "26.0"
 fileGroups:
   - README.md
   - sources_acknowledgements.md
@@ -33,11 +34,45 @@ targets:
         DEVELOPMENT_TEAM: ""
         INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright 2026 Dennis Gill"
     dependencies: []
+  FounderDashboardCompanion:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+        excludes:
+          - App/FounderDashboardRootView.swift
+          - Services/DocumentOpening.swift
+          - Views/Documents/DocumentsView.swift
+          - Views/Documents/ImportsView.swift
+          - Views/Documents/SourcesView.swift
+      - path: Resources
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_NAME: FounderDashboard Companion
+        PRODUCT_BUNDLE_IDENTIFIER: com.dennisgill.FounderDashboardCompanion
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""
+        TARGETED_DEVICE_FAMILY: "1"
+        SUPPORTS_MACCATALYST: NO
+        INFOPLIST_KEY_CFBundleDisplayName: FounderDashboard Companion
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright 2026 Dennis Gill"
+    dependencies: []
 schemes:
   FounderDashboard:
     build:
       targets:
         FounderDashboard: all
+    run:
+      config: Debug
+    archive:
+      config: Release
+  FounderDashboardCompanion:
+    build:
+      targets:
+        FounderDashboardCompanion: all
     run:
       config: Debug
     archive:

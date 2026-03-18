@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0CE1AF0588B104910BEE812C"
-               BuildableName = "FounderDashboard.app"
-               BlueprintName = "FounderDashboard"
+               BlueprintIdentifier = "969827973DECD9FF3020FB13"
+               BuildableName = "FounderDashboard Companion.app"
+               BlueprintName = "FounderDashboardCompanion"
                ReferencedContainer = "container:FounderDashboard.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -30,9 +30,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0CE1AF0588B104910BEE812C"
-            BuildableName = "FounderDashboard.app"
-            BlueprintName = "FounderDashboard"
+            BlueprintIdentifier = "969827973DECD9FF3020FB13"
+            BuildableName = "FounderDashboard Companion.app"
+            BlueprintName = "FounderDashboardCompanion"
             ReferencedContainer = "container:FounderDashboard.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -53,9 +53,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0CE1AF0588B104910BEE812C"
-            BuildableName = "FounderDashboard.app"
-            BlueprintName = "FounderDashboard"
+            BlueprintIdentifier = "969827973DECD9FF3020FB13"
+            BuildableName = "FounderDashboard Companion.app"
+            BlueprintName = "FounderDashboardCompanion"
             ReferencedContainer = "container:FounderDashboard.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -70,9 +70,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0CE1AF0588B104910BEE812C"
-            BuildableName = "FounderDashboard.app"
-            BlueprintName = "FounderDashboard"
+            BlueprintIdentifier = "969827973DECD9FF3020FB13"
+            BuildableName = "FounderDashboard Companion.app"
+            BlueprintName = "FounderDashboardCompanion"
             ReferencedContainer = "container:FounderDashboard.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
