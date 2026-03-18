@@ -182,7 +182,7 @@ struct ImportedReport: Codable, Identifiable, Hashable {
     let detectedKind: ReportKind
 
     var storedFileURL: URL {
-        ImportedReportStore.storedReportsDirectory.appendingPathComponent(storedFileName)
+        ImportedReportStorage.storedReportsDirectory.appendingPathComponent(storedFileName)
     }
 }
 

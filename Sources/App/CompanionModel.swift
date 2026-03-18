@@ -1,53 +1,18 @@
 import Foundation
 import Observation
 
+#if os(iOS)
 @MainActor
 @Observable
-final class AppModel {
+final class CompanionModel {
     private static let completedChecklistDefaultsKey = "FounderDashboard.completedLaunchChecklistTaskIDs"
     private static let cashRealityDefaultsKey = "FounderDashboard.launchCashReality"
     private static let siteStatusesDefaultsKey = "FounderDashboard.sitePipelineStatuses"
 
-    enum Section: String, CaseIterable, Hashable, Identifiable {
-        case dashboard
-        case lgsFunding
-        case deckedBuilder
-        case imports
-        case documents
-        case sources
+    var funding: FundingSnapshot
+    let launchChecklistTasks: [LaunchChecklistTask]
+    var isHydratingSnapshot = false
 
-        var id: String { rawValue }
-
-        var title: String {
-            switch self {
-            case .dashboard: "Dashboard"
-            case .lgsFunding: "LGS Funding"
-            case .deckedBuilder: "Decked Builder"
-            case .imports: "Imports"
-            case .documents: "Documents"
-            case .sources: "Sources"
-            }
-        }
-
-        var systemImage: String {
-            switch self {
-            case .dashboard: "rectangle.grid.2x2"
-            case .lgsFunding: "dollarsign.circle"
-            case .deckedBuilder: "chart.line.uptrend.xyaxis"
-            case .imports: "square.and.arrow.down"
-            case .documents: "doc.text"
-            case .sources: "list.bullet.clipboard"
-            }
-        }
-    }
-
-    var selectedSection: Section? = .dashboard
-    var snapshot: PlanningSnapshot
-    var importedReports: [ImportedReport] = []
-    var importedDeckedBuilderInsights = ImportedDeckedBuilderInsights.empty
-    var importStatusMessage: String?
-    var importFocus: ImportFocus?
-    var isHydratingImportedReports = false
     var completedLaunchChecklistTaskIDs: Set<String>
     var sitePipelineStatuses: [String: SitePipelineStatus] {
         didSet {
@@ -60,10 +25,6 @@ final class AppModel {
         }
     }
 
-    var launchChecklistTasks: [LaunchChecklistTask] {
-        LaunchChecklistTask.starterTasks
-    }
-
     var completedLaunchChecklistCount: Int {
         launchChecklistTasks.filter { completedLaunchChecklistTaskIDs.contains($0.id) }.count
     }
@@ -72,72 +33,31 @@ final class AppModel {
         launchChecklistTasks.first { !completedLaunchChecklistTaskIDs.contains($0.id) }
     }
 
-    init(snapshot: PlanningSnapshot = AppModel.loadSnapshot()) {
-        self.snapshot = snapshot
+    init(snapshot: PlanningSnapshot = .companionFallback) {
+        self.funding = snapshot.funding
+        self.launchChecklistTasks = LaunchChecklistTask.starterTasks
         self.completedLaunchChecklistTaskIDs = Set(
             UserDefaults.standard.stringArray(forKey: Self.completedChecklistDefaultsKey) ?? []
         )
         self.sitePipelineStatuses = Self.loadSitePipelineStatuses()
         self.launchCashReality = Self.loadLaunchCashReality()
-        self.importedDeckedBuilderInsights = .empty
     }
 
-    private static func loadSnapshot() -> PlanningSnapshot {
-        do {
-            return try PlanningSnapshotLoader.load()
-        } catch {
-            return .fallback
+    func hydrateSnapshotIfNeeded() {
+        guard !isHydratingSnapshot, funding.leadSite == PlanningSnapshot.companionFallback.funding.leadSite else {
+            return
         }
-    }
 
-    func importReports(from urls: [URL]) {
-        do {
-            let newlyImported = try ImportedReportStore.importFiles(from: urls)
-            hydrateImportedReports()
-            importStatusMessage = "Imported \(newlyImported.count) file(s) into FounderDashboard."
-        } catch {
-            importStatusMessage = error.localizedDescription
-        }
-    }
-
-    func forgetImportedReport(_ report: ImportedReport) {
-        do {
-            try ImportedReportStore.forget(report)
-            hydrateImportedReports()
-            importStatusMessage = "Removed the import reference for \(report.originalFileName)."
-        } catch {
-            importStatusMessage = error.localizedDescription
-        }
-    }
-
-    func hydrateImportedReports() {
-        guard !isHydratingImportedReports else { return }
-
-        isHydratingImportedReports = true
-        let baselineMonthlyOpsCost = snapshot.deckedBuilder.baselineMonthlyOpsCost
+        isHydratingSnapshot = true
 
         Task.detached(priority: .userInitiated) {
-            let reports = (try? ImportedReportStore.load()) ?? []
-            let insights = ImportedReportAnalyzer.analyze(
-                reports,
-                baselineMonthlyOpsCost: baselineMonthlyOpsCost
-            )
+            let snapshot = (try? PlanningSnapshotLoader.load()) ?? .companionFallback
 
             await MainActor.run {
-                self.importedReports = reports
-                self.importedDeckedBuilderInsights = insights
-                self.isHydratingImportedReports = false
+                self.funding = snapshot.funding
+                self.isHydratingSnapshot = false
             }
         }
-    }
-
-    func resetImportedReportHydrationState() {
-        isHydratingImportedReports = false
-    }
-
-    func openImports(focus: ImportFocus) {
-        importFocus = focus
-        selectedSection = .imports
     }
 
     func toggleLaunchChecklistTask(_ task: LaunchChecklistTask) {
@@ -160,10 +80,11 @@ final class AppModel {
     func setSitePipelineStatus(_ status: SitePipelineStatus, for candidate: SiteCandidate) {
         sitePipelineStatuses[candidate.name] = status
     }
+
     private static func loadLaunchCashReality() -> LaunchCashReality {
         guard let data = UserDefaults.standard.data(forKey: cashRealityDefaultsKey),
               let decoded = try? JSONDecoder().decode(LaunchCashReality.self, from: data) else {
-            return LaunchCashReality.empty
+            return .empty
         }
 
         return decoded
@@ -196,7 +117,7 @@ final class AppModel {
 }
 
 private extension PlanningSnapshot {
-    static let fallback = PlanningSnapshot(
+    static let companionFallback = PlanningSnapshot(
         generatedOn: "Unavailable",
         deckedBuilder: DeckedBuilderSnapshot(
             activeSubscribers: 0,
@@ -233,7 +154,7 @@ private extension PlanningSnapshot {
             leadSite: "Unavailable",
             secondSite: "Unavailable",
             summary: "Planning snapshot failed to load.",
-            notes: ["Rebuild the app bundle resources and try again."],
+            notes: ["Load the bundled planning snapshot again from the Mac app project."],
             siteCandidates: [],
             scenarios: []
         ),
@@ -241,3 +162,4 @@ private extension PlanningSnapshot {
         sources: []
     )
 }
+#endif

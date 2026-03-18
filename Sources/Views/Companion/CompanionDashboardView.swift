@@ -2,47 +2,23 @@ import SwiftUI
 
 #if os(iOS)
 struct CompanionDashboardView: View {
-    @Bindable var model: AppModel
-
-    private var dataStatus: DataStatusCard.Status {
-        let insights = model.importedDeckedBuilderInsights
-
-        if insights.importedReportCount == 0 || !insights.hasUsefulData {
-            return .seeded
-        }
-
-        if insights.activeSubscribers != nil &&
-            insights.trailing12MonthProceeds != nil &&
-            insights.legacyLifetimeDownloads != nil &&
-            insights.legacyIOSActiveDevices30DayAverage != nil {
-            return .imported
-        }
-
-        return .mixed
-    }
-
-    private var dataStatusSummary: String {
-        switch dataStatus {
-        case .imported:
-            return "Decked Builder metrics are fully using imported reports."
-        case .seeded:
-            return "The app is still using the planning snapshot for most Decked Builder values."
-        case .mixed:
-            return "Some Decked Builder values are live and some are still seeded."
-        }
-    }
-
-    private var dataStatusDetail: String {
-        if let latestImportDate = model.importedDeckedBuilderInsights.latestImportDate {
-            return "Latest import: \(latestImportDate.formatted(.dateTime.month().day().hour().minute()))."
-        }
-
-        return "Bring in more reports later on the Mac app to replace the remaining seeded assumptions."
-    }
+    @Bindable var model: CompanionModel
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+                if model.isHydratingSnapshot {
+                    SectionCard(title: "Loading Planning Snapshot", subtitle: "Refreshing store planning context") {
+                        HStack(spacing: 12) {
+                            ProgressView()
+
+                            Text("Pulling in the latest bundled funding snapshot.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+
                 if let nextLaunchTask = model.nextLaunchChecklistTask {
                     SectionCard(title: "Next LGS Task", subtitle: "Best current action") {
                         VStack(alignment: .leading, spacing: 10) {
@@ -66,14 +42,14 @@ struct CompanionDashboardView: View {
                     )
                     MetricCard(
                         title: "Target Cash",
-                        value: model.snapshot.funding.targetCash,
+                        value: model.funding.targetCash,
                         format: .currency(code: "USD"),
                         detail: "Recommended healthier launch threshold.",
                         systemImage: "target"
                     )
                     MetricCard(
                         title: "Lead Site",
-                        value: model.snapshot.funding.leadSite,
+                        value: model.funding.leadSite,
                         detail: "Current best-ranked location.",
                         systemImage: "mappin.and.ellipse"
                     )
@@ -85,11 +61,17 @@ struct CompanionDashboardView: View {
                     )
                 }
 
-                DataStatusCard(
-                    status: dataStatus,
-                    summary: dataStatusSummary,
-                    detail: dataStatusDetail
-                )
+                SectionCard(title: "Decked Builder Context", subtitle: "Reference while you are out") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("The companion app uses the latest bundled planning snapshot so site runs stay fast and responsive.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+
+                        Text("Use the Mac app for imported report analysis and deeper Decked Builder metrics.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
             .padding(20)
         }
@@ -99,7 +81,7 @@ struct CompanionDashboardView: View {
 
 #Preview {
     NavigationStack {
-        CompanionDashboardView(model: AppModel())
+        CompanionDashboardView(model: CompanionModel())
     }
 }
 #endif

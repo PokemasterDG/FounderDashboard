@@ -7,16 +7,15 @@ enum ImportedReportStore {
     }
 
     static var applicationSupportDirectory: URL {
-        let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        return base.appendingPathComponent("FounderDashboard", isDirectory: true)
+        ImportedReportStorage.applicationSupportDirectory
     }
 
     static var storedReportsDirectory: URL {
-        applicationSupportDirectory.appendingPathComponent("ImportedReports", isDirectory: true)
+        ImportedReportStorage.storedReportsDirectory
     }
 
     private static var manifestURL: URL {
-        applicationSupportDirectory.appendingPathComponent("imported_reports.json")
+        ImportedReportStorage.manifestURL
     }
 
     static func load() throws -> [ImportedReport] {

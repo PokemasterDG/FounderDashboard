@@ -2,7 +2,7 @@ import SwiftUI
 
 #if os(iOS)
 struct FounderDashboardCompanionRootView: View {
-    @Bindable var model: AppModel
+    @Bindable var model: CompanionModel
 
     var body: some View {
         TabView {
@@ -27,10 +27,13 @@ struct FounderDashboardCompanionRootView: View {
                 Label("Checklist", systemImage: "checklist")
             }
         }
+        .task {
+            model.hydrateSnapshotIfNeeded()
+        }
     }
 }
 
 #Preview {
-    FounderDashboardCompanionRootView(model: AppModel())
+    FounderDashboardCompanionRootView(model: CompanionModel())
 }
 #endif

@@ -43,6 +43,9 @@ struct FounderDashboardRootView: View {
                 SourcesView(generatedOn: model.snapshot.generatedOn, sources: model.snapshot.sources)
             }
         }
+        .task {
+            model.hydrateImportedReports()
+        }
     }
 }
 

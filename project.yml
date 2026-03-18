@@ -40,11 +40,19 @@ targets:
     sources:
       - path: Sources
         excludes:
+          - App/AppModel.swift
+          - App/FounderDashboardApp.swift
           - App/FounderDashboardRootView.swift
           - Services/DocumentOpening.swift
+          - Services/ImportedReportAnalyzer.swift
+          - Services/ImportedReportStore.swift
+          - Views/Components/DataStatusCard.swift
+          - Views/Dashboard/DashboardOverviewView.swift
+          - Views/Decked/DeckedBuilderView.swift
           - Views/Documents/DocumentsView.swift
           - Views/Documents/ImportsView.swift
           - Views/Documents/SourcesView.swift
+          - Views/Funding/LGSFundingView.swift
       - path: Resources
         buildPhase: resources
     settings:

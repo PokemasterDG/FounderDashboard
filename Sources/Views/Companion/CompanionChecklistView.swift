@@ -2,7 +2,7 @@ import SwiftUI
 
 #if os(iOS)
 struct CompanionChecklistView: View {
-    @Bindable var model: AppModel
+    @Bindable var model: CompanionModel
 
     var body: some View {
         List {
@@ -40,7 +40,7 @@ struct CompanionChecklistView: View {
 
 #Preview {
     NavigationStack {
-        CompanionChecklistView(model: AppModel())
+        CompanionChecklistView(model: CompanionModel())
     }
 }
 #endif

@@ -2,11 +2,11 @@ import SwiftUI
 
 #if os(iOS)
 struct CompanionSitesView: View {
-    @Bindable var model: AppModel
+    @Bindable var model: CompanionModel
 
     var body: some View {
         List {
-            ForEach(model.snapshot.funding.siteCandidates) { candidate in
+            ForEach(model.funding.siteCandidates) { candidate in
                 VStack(alignment: .leading, spacing: 10) {
                     HStack(alignment: .firstTextBaseline, spacing: 12) {
                         Text(candidate.name)
@@ -48,7 +48,7 @@ struct CompanionSitesView: View {
 
 #Preview {
     NavigationStack {
-        CompanionSitesView(model: AppModel())
+        CompanionSitesView(model: CompanionModel())
     }
 }
 #endif
