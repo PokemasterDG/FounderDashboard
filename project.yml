@@ -13,6 +13,7 @@ settings:
     PRODUCT_BUNDLE_IDENTIFIER: com.dennisgill.FounderDashboard
     SWIFT_VERSION: 6.0
     GENERATE_INFOPLIST_FILE: YES
+    GENERATE_APP_INTENTS_METADATA: NO
     MACOSX_DEPLOYMENT_TARGET: "26.0"
     INFOPLIST_KEY_CFBundleDisplayName: FounderDashboard
     INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.business

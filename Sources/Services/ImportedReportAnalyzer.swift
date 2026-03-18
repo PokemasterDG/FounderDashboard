@@ -2,7 +2,8 @@ import Foundation
 
 enum ImportedReportAnalyzer {
     static func analyze(_ reports: [ImportedReport], baselineMonthlyOpsCost: Double) -> ImportedDeckedBuilderInsights {
-        let sortedReports = reports.sorted { $0.importedAt > $1.importedAt }
+        let sortedReports = latestReportsByOriginalFileName(from: reports)
+            .sorted { $0.importedAt > $1.importedAt }
 
         var activeSubscribers: Int?
         var sixMonthSubscribers: Int?
@@ -236,6 +237,22 @@ enum ImportedReportAnalyzer {
     private static func average(of values: [Double]) -> Double {
         guard !values.isEmpty else { return 0 }
         return values.reduce(0, +) / Double(values.count)
+    }
+
+    private static func latestReportsByOriginalFileName(from reports: [ImportedReport]) -> [ImportedReport] {
+        var newestByOriginalFileName: [String: ImportedReport] = [:]
+
+        for report in reports {
+            if let existing = newestByOriginalFileName[report.originalFileName] {
+                if report.importedAt > existing.importedAt {
+                    newestByOriginalFileName[report.originalFileName] = report
+                }
+            } else {
+                newestByOriginalFileName[report.originalFileName] = report
+            }
+        }
+
+        return Array(newestByOriginalFileName.values)
     }
 }
 

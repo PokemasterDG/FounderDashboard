@@ -91,7 +91,8 @@ enum ImportedReportStore {
     }
 
     private static func save(_ reports: [ImportedReport]) throws {
-        let data = try JSONEncoder.pretty.encode(reports.sorted { $0.importedAt > $1.importedAt })
+        let deduplicatedReports = deduplicatedByOriginalFileName(reports)
+        let data = try JSONEncoder.pretty.encode(deduplicatedReports.sorted { $0.importedAt > $1.importedAt })
         try data.write(to: manifestURL, options: .atomic)
     }
 
@@ -128,7 +129,7 @@ enum ImportedReportStore {
             )
         }
 
-        return Array(reportsByStoredName.values)
+        return deduplicatedByOriginalFileName(Array(reportsByStoredName.values))
     }
 
     private static func inferredOriginalFileName(from storedFileName: String) -> String {
@@ -148,6 +149,22 @@ enum ImportedReportStore {
     private static func ensureDirectories() throws {
         try FileManager.default.createDirectory(at: applicationSupportDirectory, withIntermediateDirectories: true)
         try FileManager.default.createDirectory(at: storedReportsDirectory, withIntermediateDirectories: true)
+    }
+
+    private static func deduplicatedByOriginalFileName(_ reports: [ImportedReport]) -> [ImportedReport] {
+        var newestByOriginalFileName: [String: ImportedReport] = [:]
+
+        for report in reports {
+            if let existing = newestByOriginalFileName[report.originalFileName] {
+                if report.importedAt > existing.importedAt {
+                    newestByOriginalFileName[report.originalFileName] = report
+                }
+            } else {
+                newestByOriginalFileName[report.originalFileName] = report
+            }
+        }
+
+        return Array(newestByOriginalFileName.values)
     }
 
     private static func detectKind(for fileName: String) -> ReportKind {

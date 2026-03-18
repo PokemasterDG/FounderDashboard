@@ -17,6 +17,47 @@ struct ImportsView: View {
         self.model = model
     }
 
+    private var checklistItems: [ImportChecklistItem] {
+        let reports = model.importedReports
+
+        return [
+            ImportChecklistItem(
+                title: "Sales Chart",
+                detail: "Needed for trailing proceeds, recent revenue trend, and net monthly support.",
+                isComplete: reports.contains(where: { $0.detectedKind == .appStoreSalesChart })
+            ),
+            ImportChecklistItem(
+                title: "Subscription Report",
+                detail: "Needed for active subscribers, plan mix, and US subscriber share.",
+                isComplete: reports.contains(where: { $0.detectedKind == .subscriptionReport })
+            ),
+            ImportChecklistItem(
+                title: "Legacy iOS First-Time Downloads",
+                detail: "Needed for the imported lifetime legacy-download count.",
+                isComplete: reports.contains(where: {
+                    $0.detectedKind == .appAnalyticsDownloads &&
+                    $0.originalFileName.lowercased().contains("decked_builder (ios and visionos)")
+                })
+            ),
+            ImportChecklistItem(
+                title: "Legacy iOS Active Devices",
+                detail: "Needed for imported 30-day and 90-day active-device averages.",
+                isComplete: reports.contains(where: {
+                    $0.detectedKind == .appAnalyticsActiveDevices &&
+                    $0.originalFileName.lowercased().contains("decked_builder (ios and visionos)")
+                })
+            )
+        ]
+    }
+
+    private var completedChecklistCount: Int {
+        checklistItems.filter(\.isComplete).count
+    }
+
+    private var nextNeededChecklistItem: ImportChecklistItem? {
+        checklistItems.first(where: { !$0.isComplete })
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
@@ -113,6 +154,51 @@ struct ImportsView: View {
                         }
                     }
                 }
+
+                SectionCard(
+                    title: "Missing Report Checklist",
+                    subtitle: "\(completedChecklistCount) of \(checklistItems.count) core report types are currently covered"
+                ) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        ForEach(checklistItems) { item in
+                            Label {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(item.title)
+                                        .font(.headline)
+
+                                    Text(item.detail)
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                }
+                            } icon: {
+                                Image(systemName: item.isComplete ? "checkmark.circle.fill" : "circle")
+                                    .foregroundStyle(item.isComplete ? .green : .secondary)
+                            }
+                        }
+
+                        Divider()
+
+                        if let nextNeededChecklistItem {
+                            Label(
+                                "Next recommended import: \(nextNeededChecklistItem.title)",
+                                systemImage: "arrow.right.circle.fill"
+                            )
+                            .font(.headline)
+
+                            Text(nextNeededChecklistItem.detail)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            Label("Core Decked Builder imports are covered.", systemImage: "checkmark.seal.fill")
+                                .font(.headline)
+                                .foregroundStyle(.green)
+
+                            Text("You can still import supporting reports like Subscriber, Subscription Event, or Win-Back exports for deeper analysis later.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
             }
             .padding(24)
         }
@@ -130,6 +216,13 @@ struct ImportsView: View {
             }
         }
     }
+}
+
+private struct ImportChecklistItem: Identifiable {
+    let id = UUID()
+    let title: String
+    let detail: String
+    let isComplete: Bool
 }
 
 private struct ImportedReportRow: View {
