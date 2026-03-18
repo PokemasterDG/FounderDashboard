@@ -41,7 +41,7 @@ struct LGSFundingView: View {
                         title: "Founder Cash Range",
                         value: "\(snapshot.founderCashLow.formatted(.currency(code: "USD")))-\(snapshot.founderCashHigh.formatted(.currency(code: "USD")))",
                         detail: "Recommended founder-led contribution range right now.",
-                        systemImage: "person.crop.circle.badge.dollar"
+                        systemImage: "person.crop.circle"
                     )
                     MetricCard(
                         title: "Lead Site",

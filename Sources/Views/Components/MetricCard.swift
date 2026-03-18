@@ -35,8 +35,8 @@ extension MetricCard {
 #Preview {
     MetricCard(
         title: "Active Subscribers",
-        value: "128",
-        detail: "Sample subscriber count for preview purposes.",
+        value: "245",
+        detail: "Current Decked Builder Remastered subscriber count.",
         systemImage: "person.2.fill"
     )
     .padding()

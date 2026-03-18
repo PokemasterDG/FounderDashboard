@@ -107,6 +107,47 @@ struct ImportedReport: Codable, Identifiable, Hashable {
     }
 }
 
+struct ImportedDeckedBuilderInsights {
+    let importedReportCount: Int
+    let latestImportDate: Date?
+    let activeSubscribers: Int?
+    let sixMonthSubscribers: Int?
+    let oneMonthSubscribers: Int?
+    let usSubscriberShare: Double?
+    let trailing12MonthProceeds: Double?
+    let trailing3MonthProceeds: Double?
+    let netMonthlySupportEstimate: Double?
+    let revenueSeries: [RevenuePoint]
+    let legacyLifetimeDownloads: Int?
+    let legacyIOSActiveDevices30DayAverage: Double?
+    let legacyIOSActiveDevices90DayAverage: Double?
+    let notes: [String]
+
+    var hasUsefulData: Bool {
+        activeSubscribers != nil ||
+        trailing12MonthProceeds != nil ||
+        legacyLifetimeDownloads != nil ||
+        legacyIOSActiveDevices30DayAverage != nil
+    }
+
+    static let empty = ImportedDeckedBuilderInsights(
+        importedReportCount: 0,
+        latestImportDate: nil,
+        activeSubscribers: nil,
+        sixMonthSubscribers: nil,
+        oneMonthSubscribers: nil,
+        usSubscriberShare: nil,
+        trailing12MonthProceeds: nil,
+        trailing3MonthProceeds: nil,
+        netMonthlySupportEstimate: nil,
+        revenueSeries: [],
+        legacyLifetimeDownloads: nil,
+        legacyIOSActiveDevices30DayAverage: nil,
+        legacyIOSActiveDevices90DayAverage: nil,
+        notes: []
+    )
+}
+
 enum ReportKind: String, Codable, CaseIterable {
     case appStoreSalesChart
     case appStoreSalesTable

@@ -3,13 +3,35 @@ import SwiftUI
 
 struct DashboardOverviewView: View {
     let snapshot: PlanningSnapshot
+    let importedInsights: ImportedDeckedBuilderInsights
 
     private var decked: [GridItem] {
         [GridItem(.adaptive(minimum: 220), spacing: 16)]
     }
 
-    init(snapshot: PlanningSnapshot) {
+    private var subscriberCount: Int {
+        importedInsights.activeSubscribers ?? snapshot.deckedBuilder.activeSubscribers
+    }
+
+    private var netSupportValue: Double {
+        importedInsights.netMonthlySupportEstimate ?? snapshot.deckedBuilder.netSupportEstimate
+    }
+
+    private var downloadCount: Int {
+        importedInsights.legacyLifetimeDownloads ?? snapshot.deckedBuilder.legacyLifetimeDownloads
+    }
+
+    private var revenueSeries: [RevenuePoint] {
+        importedInsights.revenueSeries.isEmpty ? snapshot.deckedBuilder.revenueSeries : importedInsights.revenueSeries
+    }
+
+    private var deckedNotes: [String] {
+        importedInsights.notes.isEmpty ? snapshot.deckedBuilder.notes : importedInsights.notes
+    }
+
+    init(snapshot: PlanningSnapshot, importedInsights: ImportedDeckedBuilderInsights = .empty) {
         self.snapshot = snapshot
+        self.importedInsights = importedInsights
     }
 
     var body: some View {
@@ -19,7 +41,7 @@ struct DashboardOverviewView: View {
                     Text("Founder Overview")
                         .font(.largeTitle.weight(.bold))
 
-                    Text("A macOS-first control panel for software cash flow, legacy recovery, and local game store launch readiness.")
+                    Text("A macOS-first control panel for Decked Builder cash flow, legacy recovery, and Circle City Gaming launch readiness.")
                         .font(.title3)
                         .foregroundStyle(.secondary)
                 }
@@ -27,14 +49,18 @@ struct DashboardOverviewView: View {
                 LazyVGrid(columns: decked, alignment: .leading, spacing: 16) {
                     MetricCard(
                         title: "Decked Builder Subscribers",
-                        value: "\(snapshot.deckedBuilder.activeSubscribers)",
-                        detail: "Current active Remastered subscriptions.",
+                        value: "\(subscriberCount)",
+                        detail: importedInsights.activeSubscribers == nil
+                            ? "Current active Remastered subscriptions from the planning snapshot."
+                            : "Current active Remastered subscriptions from your imported subscription report.",
                         systemImage: "person.3.fill"
                     )
                     MetricCard(
                         title: "App Net Monthly Support",
-                        value: snapshot.deckedBuilder.netSupportEstimate, format: .currency(code: "USD"),
-                        detail: "Trailing-12 Apple proceeds minus baseline monthly app ops costs.",
+                        value: netSupportValue, format: .currency(code: "USD"),
+                        detail: importedInsights.netMonthlySupportEstimate == nil
+                            ? "Trailing-12 Apple proceeds minus baseline monthly app ops costs from the planning snapshot."
+                            : "Trailing-12 imported Apple proceeds minus baseline monthly app ops costs.",
                         systemImage: "waveform.path.ecg"
                     )
                     MetricCard(
@@ -45,15 +71,17 @@ struct DashboardOverviewView: View {
                     )
                     MetricCard(
                         title: "Legacy Apple Downloads",
-                        value: "\(snapshot.deckedBuilder.legacyLifetimeDownloads.formatted())",
-                        detail: "Combined lifetime first-time downloads across the old Apple app exports reviewed so far.",
+                        value: "\(downloadCount.formatted())",
+                        detail: importedInsights.legacyLifetimeDownloads == nil
+                            ? "Combined lifetime first-time downloads across the old Apple app exports reviewed so far."
+                            : "Combined lifetime first-time downloads across the imported legacy Apple app exports.",
                         systemImage: "arrow.down.circle"
                     )
                 }
 
                 HStack(alignment: .top, spacing: 20) {
                     SectionCard(title: "Decked Builder Trend", subtitle: "Most recent seeded monthly proceeds") {
-                        Chart(snapshot.deckedBuilder.revenueSeries) { point in
+                        Chart(revenueSeries) { point in
                             BarMark(
                                 x: .value("Month", point.label),
                                 y: .value("Proceeds", point.amount)
@@ -82,7 +110,7 @@ struct DashboardOverviewView: View {
                 HStack(alignment: .top, spacing: 20) {
                     SectionCard(title: "Decked Builder Notes", subtitle: "What matters for the next phase") {
                         VStack(alignment: .leading, spacing: 10) {
-                            ForEach(snapshot.deckedBuilder.notes, id: \.self) { note in
+                            ForEach(deckedNotes, id: \.self) { note in
                                 Label(note, systemImage: "checkmark.circle")
                                     .fixedSize(horizontal: false, vertical: true)
                             }
@@ -106,6 +134,9 @@ struct DashboardOverviewView: View {
 }
 
 #Preview {
-    DashboardOverviewView(snapshot: AppModel().snapshot)
+    DashboardOverviewView(
+        snapshot: AppModel().snapshot,
+        importedInsights: AppModel().importedDeckedBuilderInsights
+    )
         .frame(width: 1200, height: 900)
 }

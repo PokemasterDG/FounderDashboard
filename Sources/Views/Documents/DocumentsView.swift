@@ -19,30 +19,22 @@ struct DocumentsView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                if documents.isEmpty {
-                    SectionCard(title: "No Local Documents Yet", subtitle: "Add your own planning files later") {
-                        Text("The public sample app ships without private planning documents. This section becomes useful once you point the app at your own local files or add a document-mapping workflow.")
-                            .font(.body)
-                            .foregroundStyle(.secondary)
-                    }
-                } else {
-                    VStack(spacing: 14) {
-                        ForEach(documents) { document in
-                            SectionCard(title: document.title, subtitle: document.path) {
-                                VStack(alignment: .leading, spacing: 12) {
-                                    Text(document.summary)
-                                        .font(.body)
+                VStack(spacing: 14) {
+                    ForEach(documents) { document in
+                        SectionCard(title: document.title, subtitle: document.path) {
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text(document.summary)
+                                    .font(.body)
 
-                                    HStack {
-                                        Button("Open Document") {
-                                            DocumentOpening.open(document)
-                                        }
-
-                                        Button("Reveal In Finder") {
-                                            DocumentOpening.reveal(document)
-                                        }
-                                        .buttonStyle(.link)
+                                HStack {
+                                    Button("Open Document") {
+                                        DocumentOpening.open(document)
                                     }
+
+                                    Button("Reveal In Finder") {
+                                        DocumentOpening.reveal(document)
+                                    }
+                                    .buttonStyle(.link)
                                 }
                             }
                         }

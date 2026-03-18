@@ -40,11 +40,16 @@ final class AppModel {
     var selectedSection: Section? = .dashboard
     var snapshot: PlanningSnapshot
     var importedReports: [ImportedReport] = []
+    var importedDeckedBuilderInsights = ImportedDeckedBuilderInsights.empty
     var importStatusMessage: String?
 
     init(snapshot: PlanningSnapshot = AppModel.loadSnapshot()) {
         self.snapshot = snapshot
         self.importedReports = (try? ImportedReportStore.load()) ?? []
+        self.importedDeckedBuilderInsights = ImportedReportAnalyzer.analyze(
+            self.importedReports,
+            baselineMonthlyOpsCost: snapshot.deckedBuilder.baselineMonthlyOpsCost
+        )
     }
 
     private static func loadSnapshot() -> PlanningSnapshot {
@@ -59,6 +64,7 @@ final class AppModel {
         do {
             let newlyImported = try ImportedReportStore.importFiles(from: urls)
             importedReports = try ImportedReportStore.load()
+            refreshImportedInsights()
             importStatusMessage = "Imported \(newlyImported.count) file(s) into FounderDashboard."
         } catch {
             importStatusMessage = error.localizedDescription
@@ -69,10 +75,18 @@ final class AppModel {
         do {
             try ImportedReportStore.delete(report)
             importedReports = try ImportedReportStore.load()
+            refreshImportedInsights()
             importStatusMessage = "Removed \(report.originalFileName)."
         } catch {
             importStatusMessage = error.localizedDescription
         }
+    }
+
+    private func refreshImportedInsights() {
+        importedDeckedBuilderInsights = ImportedReportAnalyzer.analyze(
+            importedReports,
+            baselineMonthlyOpsCost: snapshot.deckedBuilder.baselineMonthlyOpsCost
+        )
     }
 }
 

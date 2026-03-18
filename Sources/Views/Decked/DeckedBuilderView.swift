@@ -3,13 +3,50 @@ import SwiftUI
 
 struct DeckedBuilderView: View {
     let snapshot: DeckedBuilderSnapshot
+    let importedInsights: ImportedDeckedBuilderInsights
 
     private var columns: [GridItem] {
         [GridItem(.adaptive(minimum: 220), spacing: 16)]
     }
 
-    init(snapshot: DeckedBuilderSnapshot) {
+    private var activeSubscribersValue: Int {
+        importedInsights.activeSubscribers ?? snapshot.activeSubscribers
+    }
+
+    private var trailing12ProceedsValue: Double {
+        importedInsights.trailing12MonthProceeds ?? snapshot.appleProceedsTrailing12
+    }
+
+    private var netMonthlySupportValue: Double {
+        importedInsights.netMonthlySupportEstimate ?? snapshot.netSupportEstimate
+    }
+
+    private var legacyActiveDevices30DayValue: Double {
+        importedInsights.legacyIOSActiveDevices30DayAverage ?? snapshot.legacyIOSActiveDevices30DayAverage
+    }
+
+    private var subscriberMix: [(String, Int)] {
+        [
+            ("6 Month", importedInsights.sixMonthSubscribers ?? snapshot.sixMonthSubscribers),
+            ("1 Month", importedInsights.oneMonthSubscribers ?? snapshot.oneMonthSubscribers)
+        ]
+    }
+
+    private var revenueSeries: [RevenuePoint] {
+        importedInsights.revenueSeries.isEmpty ? snapshot.revenueSeries : importedInsights.revenueSeries
+    }
+
+    private var legacyLifetimeDownloadsValue: Int {
+        importedInsights.legacyLifetimeDownloads ?? snapshot.legacyLifetimeDownloads
+    }
+
+    private var usSubscriberShareValue: Double {
+        importedInsights.usSubscriberShare ?? snapshot.usSubscriberShare
+    }
+
+    init(snapshot: DeckedBuilderSnapshot, importedInsights: ImportedDeckedBuilderInsights = .empty) {
         self.snapshot = snapshot
+        self.importedInsights = importedInsights
     }
 
     var body: some View {
@@ -27,28 +64,36 @@ struct DeckedBuilderView: View {
                 LazyVGrid(columns: columns, spacing: 16) {
                     MetricCard(
                         title: "Active Subscribers",
-                        value: "\(snapshot.activeSubscribers)",
-                        detail: "Current live subscriptions in Remastered.",
+                        value: "\(activeSubscribersValue)",
+                        detail: importedInsights.activeSubscribers == nil
+                            ? "Current live subscriptions from the planning snapshot."
+                            : "Current live subscriptions from your latest imported subscription report.",
                         systemImage: "person.2.fill"
                     )
                     MetricCard(
                         title: "Trailing 12-Month Proceeds",
-                        value: snapshot.appleProceedsTrailing12,
+                        value: trailing12ProceedsValue,
                         format: .currency(code: "USD"),
-                        detail: "Average monthly Apple proceeds over the last 12 active months.",
+                        detail: importedInsights.trailing12MonthProceeds == nil
+                            ? "Average monthly Apple proceeds from the planning snapshot."
+                            : "Average monthly Apple proceeds over the last 12 active months from the latest imported sales chart.",
                         systemImage: "calendar"
                     )
                     MetricCard(
                         title: "Net Monthly Support",
-                        value: snapshot.netSupportEstimate,
+                        value: netMonthlySupportValue,
                         format: .currency(code: "USD"),
-                        detail: "Current baseline support after app infrastructure costs.",
+                        detail: importedInsights.netMonthlySupportEstimate == nil
+                            ? "Current baseline support after app infrastructure costs from the planning snapshot."
+                            : "Imported trailing-12 proceeds minus baseline app infrastructure costs.",
                         systemImage: "banknote"
                     )
                     MetricCard(
                         title: "Legacy iOS Active Devices",
-                        value: snapshot.legacyIOSActiveDevices30DayAverage.formatted(.number.precision(.fractionLength(0))),
-                        detail: "Average active devices across the last 30 days on the legacy iOS app export.",
+                        value: legacyActiveDevices30DayValue.formatted(.number.precision(.fractionLength(0))),
+                        detail: importedInsights.legacyIOSActiveDevices30DayAverage == nil
+                            ? "Average active devices across the last 30 days from the planning snapshot."
+                            : "Average active devices across the last 30 days from the latest imported legacy iOS active-device export.",
                         systemImage: "iphone"
                     )
                 }
@@ -56,7 +101,7 @@ struct DeckedBuilderView: View {
                 HStack(alignment: .top, spacing: 20) {
                     SectionCard(title: "Proceeds Trend", subtitle: "Seeded from App Store Connect exports") {
                         Chart {
-                            ForEach(snapshot.revenueSeries) { point in
+                            ForEach(revenueSeries) { point in
                                 LineMark(
                                     x: .value("Month", point.label),
                                     y: .value("Proceeds", point.amount)
@@ -72,10 +117,7 @@ struct DeckedBuilderView: View {
                     }
 
                     SectionCard(title: "Subscriber Mix", subtitle: "Current subscription structure") {
-                        Chart([
-                            ("6 Month", snapshot.sixMonthSubscribers),
-                            ("1 Month", snapshot.oneMonthSubscribers)
-                        ], id: \.0) { item in
+                        Chart(subscriberMix, id: \.0) { item in
                             SectorMark(
                                 angle: .value("Subscribers", item.1),
                                 innerRadius: .ratio(0.55)
@@ -90,8 +132,8 @@ struct DeckedBuilderView: View {
                 HStack(alignment: .top, spacing: 20) {
                     SectionCard(title: "Recovery Read", subtitle: "Why the legacy base matters") {
                         VStack(alignment: .leading, spacing: 12) {
-                            Label("\(snapshot.legacyLifetimeDownloads.formatted()) lifetime first-time downloads across the reviewed legacy Apple exports.", systemImage: "tray.full")
-                            Label("\(snapshot.usSubscriberShare.formatted(.number.precision(.fractionLength(1))))% of the current subscription snapshot is US-based.", systemImage: "globe.americas")
+                            Label("\(legacyLifetimeDownloadsValue.formatted()) lifetime first-time downloads across the reviewed legacy Apple exports.", systemImage: "tray.full")
+                            Label("\(usSubscriberShareValue.formatted(.number.precision(.fractionLength(1))))% of the current subscription snapshot is US-based.", systemImage: "globe.americas")
                             Label("Android currently adds about \(snapshot.androidRevenueLow, format: .currency(code: "USD"))-\(snapshot.androidRevenueHigh, format: .currency(code: "USD")) per month, but it remains upside rather than baseline.", systemImage: "ellipsis.rectangle")
                         }
                     }
@@ -101,7 +143,7 @@ struct DeckedBuilderView: View {
                             Text(snapshot.targetMilestone)
                                 .font(.headline)
 
-                            ForEach(snapshot.notes, id: \.self) { note in
+                            ForEach(importedInsights.notes.isEmpty ? snapshot.notes : importedInsights.notes, id: \.self) { note in
                                 Label(note, systemImage: "hammer")
                                     .fixedSize(horizontal: false, vertical: true)
                             }
@@ -116,6 +158,9 @@ struct DeckedBuilderView: View {
 }
 
 #Preview {
-    DeckedBuilderView(snapshot: AppModel().snapshot.deckedBuilder)
+    DeckedBuilderView(
+        snapshot: AppModel().snapshot.deckedBuilder,
+        importedInsights: AppModel().importedDeckedBuilderInsights
+    )
         .frame(width: 1200, height: 900)
 }

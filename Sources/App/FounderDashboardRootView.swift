@@ -14,9 +14,15 @@ struct FounderDashboardRootView: View {
         } detail: {
             switch model.selectedSection ?? .dashboard {
             case .dashboard:
-                DashboardOverviewView(snapshot: model.snapshot)
+                DashboardOverviewView(
+                    snapshot: model.snapshot,
+                    importedInsights: model.importedDeckedBuilderInsights
+                )
             case .deckedBuilder:
-                DeckedBuilderView(snapshot: model.snapshot.deckedBuilder)
+                DeckedBuilderView(
+                    snapshot: model.snapshot.deckedBuilder,
+                    importedInsights: model.importedDeckedBuilderInsights
+                )
             case .lgsFunding:
                 LGSFundingView(snapshot: model.snapshot.funding)
             case .imports:
