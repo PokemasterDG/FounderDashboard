@@ -28,6 +28,7 @@ struct FounderDashboardRootView: View {
             case .lgsFunding:
                 LGSFundingView(
                     snapshot: model.snapshot.funding,
+                    launchCashReality: $model.launchCashReality,
                     launchChecklistTasks: model.launchChecklistTasks,
                     completedTaskIDs: model.completedLaunchChecklistTaskIDs,
                     onToggleTask: model.toggleLaunchChecklistTask(_:)

@@ -116,6 +116,22 @@ struct LaunchChecklistTask: Identifiable, Hashable {
     ]
 }
 
+struct LaunchCashReality: Codable, Equatable {
+    var founderCash: Double
+    var liquidationCash: Double
+    var outsideSupport: Double
+
+    var totalCash: Double {
+        founderCash + liquidationCash + outsideSupport
+    }
+
+    static let empty = LaunchCashReality(
+        founderCash: 0,
+        liquidationCash: 0,
+        outsideSupport: 0
+    )
+}
+
 struct PlanningDocument: Decodable, Identifiable {
     let title: String
     let summary: String

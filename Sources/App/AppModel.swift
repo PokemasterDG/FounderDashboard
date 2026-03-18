@@ -23,11 +23,12 @@ enum ImportFocus: String, Hashable, Identifiable {
 @Observable
 final class AppModel {
     private static let completedChecklistDefaultsKey = "FounderDashboard.completedLaunchChecklistTaskIDs"
+    private static let cashRealityDefaultsKey = "FounderDashboard.launchCashReality"
 
     enum Section: String, CaseIterable, Hashable, Identifiable {
         case dashboard
-        case deckedBuilder
         case lgsFunding
+        case deckedBuilder
         case imports
         case documents
         case sources
@@ -37,8 +38,8 @@ final class AppModel {
         var title: String {
             switch self {
             case .dashboard: "Dashboard"
-            case .deckedBuilder: "Decked Builder"
             case .lgsFunding: "LGS Funding"
+            case .deckedBuilder: "Decked Builder"
             case .imports: "Imports"
             case .documents: "Documents"
             case .sources: "Sources"
@@ -48,8 +49,8 @@ final class AppModel {
         var systemImage: String {
             switch self {
             case .dashboard: "rectangle.grid.2x2"
-            case .deckedBuilder: "chart.line.uptrend.xyaxis"
             case .lgsFunding: "dollarsign.circle"
+            case .deckedBuilder: "chart.line.uptrend.xyaxis"
             case .imports: "square.and.arrow.down"
             case .documents: "doc.text"
             case .sources: "list.bullet.clipboard"
@@ -64,6 +65,11 @@ final class AppModel {
     var importStatusMessage: String?
     var importFocus: ImportFocus?
     var completedLaunchChecklistTaskIDs: Set<String>
+    var launchCashReality: LaunchCashReality {
+        didSet {
+            persistLaunchCashReality()
+        }
+    }
 
     var launchChecklistTasks: [LaunchChecklistTask] {
         LaunchChecklistTask.starterTasks
@@ -83,6 +89,7 @@ final class AppModel {
         self.completedLaunchChecklistTaskIDs = Set(
             UserDefaults.standard.stringArray(forKey: Self.completedChecklistDefaultsKey) ?? []
         )
+        self.launchCashReality = Self.loadLaunchCashReality()
         self.importedDeckedBuilderInsights = ImportedReportAnalyzer.analyze(
             self.importedReports,
             baselineMonthlyOpsCost: snapshot.deckedBuilder.baselineMonthlyOpsCost
@@ -142,6 +149,23 @@ final class AppModel {
             importedReports,
             baselineMonthlyOpsCost: snapshot.deckedBuilder.baselineMonthlyOpsCost
         )
+    }
+
+    private static func loadLaunchCashReality() -> LaunchCashReality {
+        guard let data = UserDefaults.standard.data(forKey: cashRealityDefaultsKey),
+              let decoded = try? JSONDecoder().decode(LaunchCashReality.self, from: data) else {
+            return LaunchCashReality.empty
+        }
+
+        return decoded
+    }
+
+    private func persistLaunchCashReality() {
+        guard let data = try? JSONEncoder().encode(launchCashReality) else {
+            return
+        }
+
+        UserDefaults.standard.set(data, forKey: Self.cashRealityDefaultsKey)
     }
 }
 
