@@ -17,6 +17,7 @@ struct FounderDashboardRootView: View {
                 DashboardOverviewView(
                     snapshot: model.snapshot,
                     importedInsights: model.importedDeckedBuilderInsights,
+                    nextLaunchTask: model.nextLaunchChecklistTask,
                     onRequestImportFocus: model.openImports(focus:)
                 )
             case .deckedBuilder:

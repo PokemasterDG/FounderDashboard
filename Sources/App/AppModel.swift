@@ -73,6 +73,10 @@ final class AppModel {
         launchChecklistTasks.filter { completedLaunchChecklistTaskIDs.contains($0.id) }.count
     }
 
+    var nextLaunchChecklistTask: LaunchChecklistTask? {
+        launchChecklistTasks.first { !completedLaunchChecklistTaskIDs.contains($0.id) }
+    }
+
     init(snapshot: PlanningSnapshot = AppModel.loadSnapshot()) {
         self.snapshot = snapshot
         self.importedReports = (try? ImportedReportStore.load()) ?? []

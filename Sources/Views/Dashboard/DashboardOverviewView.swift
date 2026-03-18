@@ -4,6 +4,7 @@ import SwiftUI
 struct DashboardOverviewView: View {
     let snapshot: PlanningSnapshot
     let importedInsights: ImportedDeckedBuilderInsights
+    let nextLaunchTask: LaunchChecklistTask?
     let onRequestImportFocus: (ImportFocus) -> Void
 
     private var decked: [GridItem] {
@@ -67,10 +68,12 @@ struct DashboardOverviewView: View {
     init(
         snapshot: PlanningSnapshot,
         importedInsights: ImportedDeckedBuilderInsights = .empty,
+        nextLaunchTask: LaunchChecklistTask? = nil,
         onRequestImportFocus: @escaping (ImportFocus) -> Void = { _ in }
     ) {
         self.snapshot = snapshot
         self.importedInsights = importedInsights
+        self.nextLaunchTask = nextLaunchTask
         self.onRequestImportFocus = onRequestImportFocus
     }
 
@@ -197,11 +200,27 @@ struct DashboardOverviewView: View {
                         }
                     }
 
-                    SectionCard(title: "LGS Funding Notes", subtitle: "Current operating guardrails") {
-                        VStack(alignment: .leading, spacing: 10) {
-                            ForEach(snapshot.funding.notes, id: \.self) { note in
-                                Label(note, systemImage: "dollarsign.circle")
-                                    .fixedSize(horizontal: false, vertical: true)
+                    if let nextLaunchTask {
+                        SectionCard(title: "Next LGS Task", subtitle: "Best current store-launch action") {
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text(nextLaunchTask.title)
+                                    .font(.headline)
+
+                                Text(nextLaunchTask.detail)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+
+                                Label("Open LGS Funding to track it in the launch checklist.", systemImage: "arrow.right.circle")
+                                    .font(.subheadline)
+                            }
+                        }
+                    } else {
+                        SectionCard(title: "LGS Funding Notes", subtitle: "Current operating guardrails") {
+                            VStack(alignment: .leading, spacing: 10) {
+                                ForEach(snapshot.funding.notes, id: \.self) { note in
+                                    Label(note, systemImage: "dollarsign.circle")
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
                             }
                         }
                     }
@@ -216,7 +235,8 @@ struct DashboardOverviewView: View {
 #Preview {
     DashboardOverviewView(
         snapshot: AppModel().snapshot,
-        importedInsights: AppModel().importedDeckedBuilderInsights
+        importedInsights: AppModel().importedDeckedBuilderInsights,
+        nextLaunchTask: AppModel().nextLaunchChecklistTask
     )
         .frame(width: 1200, height: 900)
 }
