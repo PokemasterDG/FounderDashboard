@@ -89,13 +89,43 @@ struct DashboardOverviewView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                DataStatusCard(
-                    status: dataStatus,
-                    summary: dataStatusSummary,
-                    detail: dataStatusDetail
-                )
+                HStack(alignment: .top, spacing: 20) {
+                    if let nextLaunchTask {
+                        SectionCard(title: "Next LGS Task", subtitle: "Best current store-launch action") {
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text(nextLaunchTask.title)
+                                    .font(.headline)
+
+                                Text(nextLaunchTask.detail)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+
+                                Label("Open LGS Funding to track it in the launch checklist.", systemImage: "arrow.right.circle")
+                                    .font(.subheadline)
+                            }
+                        }
+                    }
+
+                    SectionCard(title: "Current Recommendation", subtitle: "What the plan says right now") {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text(snapshot.funding.summary)
+                                .font(.headline)
+
+                            Label("Lead site: \(snapshot.funding.leadSite)", systemImage: "mappin.and.ellipse")
+                            Label("Liquidation target case: \(snapshot.funding.liquidationTarget, format: .currency(code: "USD"))", systemImage: "shippingbox")
+                            Label("Strong floor launch cash: \(snapshot.funding.strongFloorCash, format: .currency(code: "USD"))", systemImage: "shield")
+                        }
+                        .font(.subheadline)
+                    }
+                }
 
                 LazyVGrid(columns: decked, alignment: .leading, spacing: 16) {
+                    MetricCard(
+                        title: "Launch Target Cash",
+                        value: snapshot.funding.targetCash, format: .currency(code: "USD"),
+                        detail: "Current recommended target for a healthier founder-led store launch.",
+                        systemImage: "target"
+                    )
                     MetricCard(
                         title: "Decked Builder Subscribers",
                         value: "\(subscriberCount)",
@@ -113,18 +143,6 @@ struct DashboardOverviewView: View {
                         systemImage: "waveform.path.ecg"
                     )
                     MetricCard(
-                        title: "Decked Coverage",
-                        value: "\(importedInsights.coreCoveragePercent)%",
-                        detail: importedInsights.coreCoverageSummary,
-                        systemImage: "checklist"
-                    )
-                    MetricCard(
-                        title: "Launch Target Cash",
-                        value: snapshot.funding.targetCash, format: .currency(code: "USD"),
-                        detail: "Current recommended target for a healthier founder-led store launch.",
-                        systemImage: "target"
-                    )
-                    MetricCard(
                         title: "Legacy Apple Downloads",
                         value: "\(downloadCount.formatted())",
                         detail: importedInsights.legacyLifetimeDownloads == nil
@@ -132,35 +150,19 @@ struct DashboardOverviewView: View {
                             : "Combined lifetime first-time downloads across the imported legacy Apple app exports.",
                         systemImage: "arrow.down.circle"
                     )
+                    MetricCard(
+                        title: "Decked Coverage",
+                        value: "\(importedInsights.coreCoveragePercent)%",
+                        detail: importedInsights.coreCoverageSummary,
+                        systemImage: "checklist"
+                    )
                 }
 
-                HStack(alignment: .top, spacing: 20) {
-                    SectionCard(title: "Decked Builder Trend", subtitle: "Most recent seeded monthly proceeds") {
-                        Chart(revenueSeries) { point in
-                            BarMark(
-                                x: .value("Month", point.label),
-                                y: .value("Proceeds", point.amount)
-                            )
-                            .foregroundStyle(.orange.gradient)
-                        }
-                        .chartYAxis {
-                            AxisMarks(position: .leading)
-                        }
-                        .frame(height: 220)
-                    }
-
-                    SectionCard(title: "Current Recommendation", subtitle: "What the plan says right now") {
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text(snapshot.funding.summary)
-                                .font(.headline)
-
-                            Label("Lead site: \(snapshot.funding.leadSite)", systemImage: "mappin.and.ellipse")
-                            Label("Liquidation target case: \(snapshot.funding.liquidationTarget, format: .currency(code: "USD"))", systemImage: "shippingbox")
-                            Label("Strong floor launch cash: \(snapshot.funding.strongFloorCash, format: .currency(code: "USD"))", systemImage: "shield")
-                        }
-                        .font(.subheadline)
-                    }
-                }
+                DataStatusCard(
+                    status: dataStatus,
+                    summary: dataStatusSummary,
+                    detail: dataStatusDetail
+                )
 
                 SectionCard(title: "Coverage Breakdown", subtitle: "Which core metrics are imported right now") {
                     VStack(alignment: .leading, spacing: 10) {
@@ -191,6 +193,20 @@ struct DashboardOverviewView: View {
                 }
 
                 HStack(alignment: .top, spacing: 20) {
+                    SectionCard(title: "Decked Builder Trend", subtitle: "Most recent seeded monthly proceeds") {
+                        Chart(revenueSeries) { point in
+                            BarMark(
+                                x: .value("Month", point.label),
+                                y: .value("Proceeds", point.amount)
+                            )
+                            .foregroundStyle(.orange.gradient)
+                        }
+                        .chartYAxis {
+                            AxisMarks(position: .leading)
+                        }
+                        .frame(height: 220)
+                    }
+
                     SectionCard(title: "Decked Builder Notes", subtitle: "What matters for the next phase") {
                         VStack(alignment: .leading, spacing: 10) {
                             ForEach(deckedNotes, id: \.self) { note in
@@ -199,32 +215,16 @@ struct DashboardOverviewView: View {
                             }
                         }
                     }
+                }
 
-                    if let nextLaunchTask {
-                        SectionCard(title: "Next LGS Task", subtitle: "Best current store-launch action") {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text(nextLaunchTask.title)
-                                    .font(.headline)
-
-                                Text(nextLaunchTask.detail)
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-
-                                Label("Open LGS Funding to track it in the launch checklist.", systemImage: "arrow.right.circle")
-                                    .font(.subheadline)
-                            }
-                        }
-                    } else {
-                        SectionCard(title: "LGS Funding Notes", subtitle: "Current operating guardrails") {
-                            VStack(alignment: .leading, spacing: 10) {
-                                ForEach(snapshot.funding.notes, id: \.self) { note in
-                                    Label(note, systemImage: "dollarsign.circle")
-                                        .fixedSize(horizontal: false, vertical: true)
-                                }
+                SectionCard(title: "LGS Funding Notes", subtitle: "Current operating guardrails") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        ForEach(snapshot.funding.notes, id: \.self) { note in
+                            Label(note, systemImage: "dollarsign.circle")
+                                .fixedSize(horizontal: false, vertical: true)
                             }
                         }
                     }
-                }
             }
             .padding(24)
         }
