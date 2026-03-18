@@ -17,13 +17,21 @@ enum ImportedReportStore {
     static func load() throws -> [ImportedReport] {
         try ensureDirectories()
 
-        guard FileManager.default.fileExists(atPath: manifestURL.path()) else {
-            return []
+        let manifestReports: [ImportedReport]
+
+        if FileManager.default.fileExists(atPath: manifestURL.path()) {
+            let data = try Data(contentsOf: manifestURL)
+            manifestReports = try JSONDecoder().decode([ImportedReport].self, from: data)
+        } else {
+            manifestReports = []
         }
 
-        let data = try Data(contentsOf: manifestURL)
-        let reports = try JSONDecoder().decode([ImportedReport].self, from: data)
-        return reports.sorted { $0.importedAt > $1.importedAt }
+        let reconciledReports = try reconcileManifestReportsWithStoredFiles(manifestReports)
+        if reconciledReports != manifestReports.sorted(by: { $0.importedAt > $1.importedAt }) {
+            try save(reconciledReports)
+        }
+
+        return reconciledReports.sorted { $0.importedAt > $1.importedAt }
     }
 
     @discardableResult
@@ -85,6 +93,56 @@ enum ImportedReportStore {
     private static func save(_ reports: [ImportedReport]) throws {
         let data = try JSONEncoder.pretty.encode(reports.sorted { $0.importedAt > $1.importedAt })
         try data.write(to: manifestURL, options: .atomic)
+    }
+
+    private static func reconcileManifestReportsWithStoredFiles(_ manifestReports: [ImportedReport]) throws -> [ImportedReport] {
+        let fileManager = FileManager.default
+        let storedFileURLs = try fileManager.contentsOfDirectory(
+            at: storedReportsDirectory,
+            includingPropertiesForKeys: [.creationDateKey, .contentModificationDateKey, .fileSizeKey, .isRegularFileKey],
+            options: [.skipsHiddenFiles]
+        )
+
+        var reportsByStoredName = Dictionary(uniqueKeysWithValues: manifestReports.map { ($0.storedFileName, $0) })
+
+        for fileURL in storedFileURLs {
+            let values = try fileURL.resourceValues(forKeys: [.creationDateKey, .contentModificationDateKey, .fileSizeKey, .isRegularFileKey])
+            guard values.isRegularFile == true else { continue }
+
+            let storedFileName = fileURL.lastPathComponent
+            if reportsByStoredName[storedFileName] != nil {
+                continue
+            }
+
+            let originalFileName = inferredOriginalFileName(from: storedFileName)
+            let importedAt = values.creationDate ?? values.contentModificationDate ?? Date()
+            let fileSize = Int64(values.fileSize ?? 0)
+
+            reportsByStoredName[storedFileName] = ImportedReport(
+                id: UUID(),
+                originalFileName: originalFileName,
+                storedFileName: storedFileName,
+                importedAt: importedAt,
+                fileSize: fileSize,
+                detectedKind: detectKind(for: originalFileName)
+            )
+        }
+
+        return Array(reportsByStoredName.values)
+    }
+
+    private static func inferredOriginalFileName(from storedFileName: String) -> String {
+        let segments = storedFileName.split(separator: "-", maxSplits: 5, omittingEmptySubsequences: false)
+        guard segments.count >= 6 else {
+            return storedFileName
+        }
+
+        let possibleUUID = segments.prefix(5).joined(separator: "-")
+        if UUID(uuidString: possibleUUID) != nil {
+            return String(segments[5])
+        }
+
+        return storedFileName
     }
 
     private static func ensureDirectories() throws {

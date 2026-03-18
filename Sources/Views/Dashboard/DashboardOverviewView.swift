@@ -29,6 +29,40 @@ struct DashboardOverviewView: View {
         importedInsights.notes.isEmpty ? snapshot.deckedBuilder.notes : importedInsights.notes
     }
 
+    private var dataStatus: DataStatusCard.Status {
+        if importedInsights.importedReportCount == 0 || !importedInsights.hasUsefulData {
+            return .seeded
+        }
+
+        if importedInsights.activeSubscribers != nil &&
+            importedInsights.trailing12MonthProceeds != nil &&
+            importedInsights.legacyLifetimeDownloads != nil &&
+            importedInsights.legacyIOSActiveDevices30DayAverage != nil {
+            return .imported
+        }
+
+        return .mixed
+    }
+
+    private var dataStatusSummary: String {
+        switch dataStatus {
+        case .imported:
+            return "The Decked Builder overview is using imported App Store Connect data."
+        case .seeded:
+            return "The overview is still using the planning snapshot."
+        case .mixed:
+            return "The overview is using a mix of imported reports and seeded planning values."
+        }
+    }
+
+    private var dataStatusDetail: String {
+        if let latestImportDate = importedInsights.latestImportDate {
+            return "Latest import: \(latestImportDate.formatted(.dateTime.month().day().year().hour().minute())). Import more report types to replace any remaining seeded fields."
+        }
+
+        return "Bring in sales charts, subscription reports, and legacy analytics exports to replace the seeded assumptions."
+    }
+
     init(snapshot: PlanningSnapshot, importedInsights: ImportedDeckedBuilderInsights = .empty) {
         self.snapshot = snapshot
         self.importedInsights = importedInsights
@@ -45,6 +79,12 @@ struct DashboardOverviewView: View {
                         .font(.title3)
                         .foregroundStyle(.secondary)
                 }
+
+                DataStatusCard(
+                    status: dataStatus,
+                    summary: dataStatusSummary,
+                    detail: dataStatusDetail
+                )
 
                 LazyVGrid(columns: decked, alignment: .leading, spacing: 16) {
                     MetricCard(

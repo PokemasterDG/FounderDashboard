@@ -71,6 +71,48 @@ struct ImportsView: View {
                         }
                     }
                 }
+
+                SectionCard(title: "Recognized Data", subtitle: "What the app is currently able to use from imported reports") {
+                    if !model.importedDeckedBuilderInsights.hasUsefulData {
+                        Text("No imported metrics are active yet. Once a report is recognized, this section will show exactly what changed.")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        VStack(alignment: .leading, spacing: 12) {
+                            if let latestImportDate = model.importedDeckedBuilderInsights.latestImportDate {
+                                Label(
+                                    "Latest import: \(latestImportDate.formatted(.dateTime.month().day().year().hour().minute()))",
+                                    systemImage: "clock"
+                                )
+                                .foregroundStyle(.secondary)
+                            }
+
+                            if let activeSubscribers = model.importedDeckedBuilderInsights.activeSubscribers {
+                                Label("Active subscribers from imported reports: \(activeSubscribers)", systemImage: "person.2.fill")
+                            }
+
+                            if let trailing12MonthProceeds = model.importedDeckedBuilderInsights.trailing12MonthProceeds {
+                                Label(
+                                    "Trailing 12-month proceeds from imported sales charts: \(trailing12MonthProceeds.formatted(.currency(code: "USD")))",
+                                    systemImage: "chart.line.uptrend.xyaxis"
+                                )
+                            }
+
+                            if let legacyLifetimeDownloads = model.importedDeckedBuilderInsights.legacyLifetimeDownloads {
+                                Label(
+                                    "Legacy lifetime downloads from imported analytics files: \(legacyLifetimeDownloads.formatted())",
+                                    systemImage: "arrow.down.circle"
+                                )
+                            }
+
+                            if let average30Day = model.importedDeckedBuilderInsights.legacyIOSActiveDevices30DayAverage {
+                                Label(
+                                    "Legacy iOS 30-day active-device average from imports: \(average30Day.formatted(.number.precision(.fractionLength(0))))",
+                                    systemImage: "iphone"
+                                )
+                            }
+                        }
+                    }
+                }
             }
             .padding(24)
         }

@@ -13,6 +13,7 @@
 		4E5766CD2350D8A21AAF3CD5 /* ImportedReportAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129E411011210D7C40685C33 /* ImportedReportAnalyzer.swift */; };
 		4EA605F64E1D2AF6E37B5C79 /* DeckedBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9478828EEBBFB1F5357A7A /* DeckedBuilderView.swift */; };
 		6A48A0E81EA29CD5C7961C0D /* ImportedReportStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADA9B378B9256F1A7B04DFA /* ImportedReportStore.swift */; };
+		6BE71F8C3CAAAE51989004CD /* DataStatusCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5231583E943F9099781D411 /* DataStatusCard.swift */; };
 		86F29E9A50806D590B042293 /* DocumentOpening.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF957E6D010012E81A98C984 /* DocumentOpening.swift */; };
 		98344310FECAD8C0936D6B7A /* FounderDashboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17922574AE2584BF5691FA67 /* FounderDashboardApp.swift */; };
 		9A730808D9C1752C84324D2B /* PlanningSnapshotLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E274246EDF890D5A1E6D704 /* PlanningSnapshotLoader.swift */; };
@@ -49,6 +50,7 @@
 		BF957E6D010012E81A98C984 /* DocumentOpening.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentOpening.swift; sourceTree = "<group>"; };
 		CD4EB6B65DA6103A734CE558 /* sources_acknowledgements.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = sources_acknowledgements.md; sourceTree = "<group>"; };
 		D8BB82727A477231A9CF0CFD /* MetricCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricCard.swift; sourceTree = "<group>"; };
+		F5231583E943F9099781D411 /* DataStatusCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStatusCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -99,6 +101,7 @@
 		705A75626B33440EE6B958C5 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				F5231583E943F9099781D411 /* DataStatusCard.swift */,
 				D8BB82727A477231A9CF0CFD /* MetricCard.swift */,
 				20E7887449FFC147A57824B4 /* SectionCard.swift */,
 			);
@@ -211,7 +214,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 2630;
 				TargetAttributes = {
 					0CE1AF0588B104910BEE812C = {
 						DevelopmentTeam = "";
@@ -257,6 +260,7 @@
 			files = (
 				278A69CAAC0FE32256B9DD58 /* AppModel.swift in Sources */,
 				C24B2CFCA1A8C7FEA90E08DC /* DashboardOverviewView.swift in Sources */,
+				6BE71F8C3CAAAE51989004CD /* DataStatusCard.swift in Sources */,
 				4EA605F64E1D2AF6E37B5C79 /* DeckedBuilderView.swift in Sources */,
 				86F29E9A50806D590B042293 /* DocumentOpening.swift in Sources */,
 				CF2402DEB96D6373955DF4D3 /* DocumentsView.swift in Sources */,
@@ -312,9 +316,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -339,6 +345,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.dennisgill.FounderDashboard;
 				PRODUCT_NAME = FounderDashboard;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
@@ -380,9 +387,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -400,6 +409,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.dennisgill.FounderDashboard;
 				PRODUCT_NAME = FounderDashboard;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 6.0;
@@ -412,6 +422,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Dennis Gill";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -429,6 +440,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Dennis Gill";
 				LD_RUNPATH_SEARCH_PATHS = (

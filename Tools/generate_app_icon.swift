@@ -43,7 +43,7 @@ func starPath(in rect: CGRect) -> CGPath {
         let radius = index.isMultiple(of: 2) ? outerRadius : innerRadius
         let point = CGPoint(
             x: center.x + cos(angle) * radius,
-            y: center.y + sin(angle) * radius
+            y: center.y - sin(angle) * radius
         )
 
         if index == 0 {
