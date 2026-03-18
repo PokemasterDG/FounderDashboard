@@ -1,0 +1,110 @@
+{
+  "generatedOn": "Sample Data",
+  "deckedBuilder": {
+    "activeSubscribers": 128,
+    "appleProceedsTrailing12": 420.0,
+    "appleProceedsTrailing3": 465.0,
+    "appCashAvailable": 0.0,
+    "cashAvailableForStore": 0.0,
+    "baselineMonthlyOpsCost": 39.0,
+    "usSubscriberShare": 71.5,
+    "sixMonthSubscribers": 80,
+    "oneMonthSubscribers": 48,
+    "legacyLifetimeDownloads": 18000,
+    "legacyIOSActiveDevices30DayAverage": 140.0,
+    "legacyIOSActiveDevices90DayAverage": 152.0,
+    "targetMilestone": "Example milestone: ship the next major version before a large convention or campaign window.",
+    "androidRevenueLow": 40.0,
+    "androidRevenueHigh": 150.0,
+    "notes": [
+      "This public repo uses illustrative sample numbers instead of private founder data.",
+      "Use the Imports screen to bring in your own App Store Connect exports.",
+      "Treat recurring software revenue as runway support first, then model upside separately."
+    ],
+    "revenueSeries": [
+      { "label": "Oct", "amount": 360.0 },
+      { "label": "Nov", "amount": 410.0 },
+      { "label": "Dec", "amount": 390.0 },
+      { "label": "Jan", "amount": 430.0 },
+      { "label": "Feb", "amount": 480.0 },
+      { "label": "Mar", "amount": 520.0 }
+    ]
+  },
+  "funding": {
+    "baseCashNeedLow": 50000.0,
+    "baseCashNeedHigh": 70000.0,
+    "strongFloorCash": 65000.0,
+    "targetCash": 80000.0,
+    "saferCash": 95000.0,
+    "liquidationTarget": 30000.0,
+    "founderCashLow": 15000.0,
+    "founderCashHigh": 25000.0,
+    "outsideCapitalLow": 0.0,
+    "outsideCapitalHigh": 15000.0,
+    "retainedInventoryLow": 40000.0,
+    "retainedInventoryHigh": 60000.0,
+    "leadSite": "Example lead site",
+    "secondSite": "Example alternate site",
+    "summary": "Best current launch shape: founder-led, scenario-based, and disciplined on occupancy cost.",
+    "notes": [
+      "Protect runway before chasing more space or more inventory.",
+      "Treat liquidation and outside support as scenario levers, not guaranteed facts.",
+      "Model software cash flow as support, not as a substitute for launch reserves."
+    ],
+    "siteCandidates": [
+      {
+        "name": "Neighborhood Strip Center",
+        "score": 82.0,
+        "summary": "Balanced option with manageable rent and clear access."
+      },
+      {
+        "name": "Main Corridor Site",
+        "score": 77.5,
+        "summary": "Higher visibility, but potentially more expensive to carry."
+      },
+      {
+        "name": "Convenience-Focused Option",
+        "score": 74.0,
+        "summary": "Close to home or community base, with narrower growth ceiling."
+      }
+    ],
+    "scenarios": [
+      {
+        "name": "Lean",
+        "totalCash": 65000.0,
+        "status": "Tight",
+        "summary": "Viable if the site stays practical and reserves stay disciplined."
+      },
+      {
+        "name": "Base",
+        "totalCash": 80000.0,
+        "status": "Recommended",
+        "summary": "Enough breathing room for a healthy founder-led launch."
+      },
+      {
+        "name": "Cushioned",
+        "totalCash": 95000.0,
+        "status": "Safer",
+        "summary": "Additional safety should strengthen runway, not rent tolerance."
+      }
+    ]
+  },
+  "documents": [],
+  "sources": [
+    {
+      "title": "Bundled Sample Snapshot",
+      "kind": "JSON Seed Data",
+      "detail": "The public repo ships with neutral sample numbers so the UI can preview cleanly."
+    },
+    {
+      "title": "Imported Reports",
+      "kind": "User Data",
+      "detail": "Your real App Store Connect exports are imported locally at runtime and are not committed to the repo."
+    },
+    {
+      "title": "Future API Integration",
+      "kind": "Planned",
+      "detail": "A later version can layer App Store Connect API sync on top of the current CSV and report import flow."
+    }
+  ]
+}
