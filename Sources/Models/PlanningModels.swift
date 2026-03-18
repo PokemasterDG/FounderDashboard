@@ -77,6 +77,45 @@ struct FundingScenario: Decodable, Identifiable {
     var id: String { name }
 }
 
+struct LaunchChecklistTask: Identifiable, Hashable {
+    let id: String
+    let title: String
+    let detail: String
+
+    static let starterTasks: [LaunchChecklistTask] = [
+        LaunchChecklistTask(
+            id: "site-tour",
+            title: "Tour the top three sites",
+            detail: "Visit 855 N High School Rd, 5735 Crawfordsville Rd, and 7301 Rockville Rd in the evening and update parking, safety, and visibility notes."
+        ),
+        LaunchChecklistTask(
+            id: "broker-rent",
+            title: "Get real rent numbers",
+            detail: "Ask brokers for base rent, CAM, event-use approval, and signage rights so the shortlist can move from estimated to real economics."
+        ),
+        LaunchChecklistTask(
+            id: "liquidation-plan",
+            title: "Map the $50k liquidation plan",
+            detail: "Break the pre-launch inventory sale target into concrete Pokemon and Magic batches with a timing plan."
+        ),
+        LaunchChecklistTask(
+            id: "founder-cash",
+            title: "Lock the founder cash range",
+            detail: "Decide what founder cash can go in without recreating personal fragility."
+        ),
+        LaunchChecklistTask(
+            id: "decked-2-launch",
+            title: "Stabilize Decked Builder 2.0.0",
+            detail: "Keep the app on track for the MagicCon Las Vegas runway so it can support the store as recurring cash flow."
+        ),
+        LaunchChecklistTask(
+            id: "funding-go-no-go",
+            title: "Set a launch go/no-go threshold",
+            detail: "Decide the minimum real cash and runway conditions required before signing a lease."
+        )
+    ]
+}
+
 struct PlanningDocument: Decodable, Identifiable {
     let title: String
     let summary: String
@@ -126,6 +165,8 @@ struct ImportedDeckedBuilderInsights {
     struct CoverageItem: Identifiable {
         let title: String
         let isImported: Bool
+        let recommendation: String
+        let importFocus: ImportFocus
 
         var id: String { title }
     }
@@ -157,10 +198,30 @@ struct ImportedDeckedBuilderInsights {
 
     var coverageItems: [CoverageItem] {
         [
-            CoverageItem(title: "Active subscribers", isImported: activeSubscribers != nil),
-            CoverageItem(title: "Trailing 12-month proceeds", isImported: trailing12MonthProceeds != nil),
-            CoverageItem(title: "Legacy lifetime downloads", isImported: legacyLifetimeDownloads != nil),
-            CoverageItem(title: "Legacy iOS active devices", isImported: legacyIOSActiveDevices30DayAverage != nil)
+            CoverageItem(
+                title: "Active subscribers",
+                isImported: activeSubscribers != nil,
+                recommendation: "Import a Subscription Report export to replace the seeded subscriber count and plan mix.",
+                importFocus: .subscriptionReport
+            ),
+            CoverageItem(
+                title: "Trailing 12-month proceeds",
+                isImported: trailing12MonthProceeds != nil,
+                recommendation: "Import an itunes_sales_chart CSV to replace the seeded Apple proceeds assumptions.",
+                importFocus: .salesChart
+            ),
+            CoverageItem(
+                title: "Legacy lifetime downloads",
+                isImported: legacyLifetimeDownloads != nil,
+                recommendation: "Import first_time_downloads exports for the legacy Apple apps, starting with iOS and visionOS.",
+                importFocus: .legacyIOSDownloads
+            ),
+            CoverageItem(
+                title: "Legacy iOS active devices",
+                isImported: legacyIOSActiveDevices30DayAverage != nil,
+                recommendation: "Import an active_devices export for the legacy iOS and visionOS app to replace the seeded activity averages.",
+                importFocus: .legacyIOSActiveDevices
+            )
         ]
     }
 

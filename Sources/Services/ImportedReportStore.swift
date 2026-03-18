@@ -1,6 +1,11 @@
 import Foundation
 
 enum ImportedReportStore {
+    private struct ManifestEnvelope: Codable {
+        var reports: [ImportedReport]
+        var hiddenStoredFileNames: [String]
+    }
+
     static var applicationSupportDirectory: URL {
         let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         return base.appendingPathComponent("FounderDashboard", isDirectory: true)
@@ -17,18 +22,14 @@ enum ImportedReportStore {
     static func load() throws -> [ImportedReport] {
         try ensureDirectories()
 
-        let manifestReports: [ImportedReport]
-
-        if FileManager.default.fileExists(atPath: manifestURL.path()) {
-            let data = try Data(contentsOf: manifestURL)
-            manifestReports = try JSONDecoder().decode([ImportedReport].self, from: data)
-        } else {
-            manifestReports = []
-        }
-
-        let reconciledReports = try reconcileManifestReportsWithStoredFiles(manifestReports)
-        if reconciledReports != manifestReports.sorted(by: { $0.importedAt > $1.importedAt }) {
-            try save(reconciledReports)
+        var manifest = try loadManifest()
+        let reconciledReports = try reconcileManifestReportsWithStoredFiles(
+            manifest.reports,
+            hiddenStoredFileNames: Set(manifest.hiddenStoredFileNames)
+        )
+        if reconciledReports != manifest.reports.sorted(by: { $0.importedAt > $1.importedAt }) {
+            manifest.reports = reconciledReports
+            try save(manifest)
         }
 
         return reconciledReports.sorted { $0.importedAt > $1.importedAt }
@@ -38,7 +39,8 @@ enum ImportedReportStore {
     static func importFiles(from urls: [URL]) throws -> [ImportedReport] {
         try ensureDirectories()
 
-        var existing = try load()
+        var manifest = try loadManifest()
+        var existing = manifest.reports
         var imported: [ImportedReport] = []
 
         for sourceURL in urls {
@@ -72,31 +74,56 @@ enum ImportedReportStore {
             )
             existing.append(report)
             imported.append(report)
+            manifest.hiddenStoredFileNames.removeAll { $0 == storedName }
         }
 
-        try save(existing)
+        manifest.reports = existing
+        try save(manifest)
         return imported.sorted { $0.importedAt > $1.importedAt }
     }
 
-    static func delete(_ report: ImportedReport) throws {
-        var reports = try load()
-        reports.removeAll { $0.id == report.id }
+    static func forget(_ report: ImportedReport) throws {
+        var manifest = try loadManifest()
+        manifest.reports.removeAll { $0.id == report.id }
 
-        let fileURL = report.storedFileURL
-        if FileManager.default.fileExists(atPath: fileURL.path()) {
-            try FileManager.default.removeItem(at: fileURL)
+        if !manifest.hiddenStoredFileNames.contains(report.storedFileName) {
+            manifest.hiddenStoredFileNames.append(report.storedFileName)
         }
 
-        try save(reports)
+        try save(manifest)
     }
 
-    private static func save(_ reports: [ImportedReport]) throws {
-        let deduplicatedReports = deduplicatedByOriginalFileName(reports)
-        let data = try JSONEncoder.pretty.encode(deduplicatedReports.sorted { $0.importedAt > $1.importedAt })
+    private static func save(_ manifest: ManifestEnvelope) throws {
+        let deduplicatedReports = deduplicatedByOriginalFileName(manifest.reports)
+        let deduplicatedHiddenNames = Array(Set(manifest.hiddenStoredFileNames)).sorted()
+        let data = try JSONEncoder.pretty.encode(
+            ManifestEnvelope(
+                reports: deduplicatedReports.sorted { $0.importedAt > $1.importedAt },
+                hiddenStoredFileNames: deduplicatedHiddenNames
+            )
+        )
         try data.write(to: manifestURL, options: .atomic)
     }
 
-    private static func reconcileManifestReportsWithStoredFiles(_ manifestReports: [ImportedReport]) throws -> [ImportedReport] {
+    private static func loadManifest() throws -> ManifestEnvelope {
+        guard FileManager.default.fileExists(atPath: manifestURL.path()) else {
+            return ManifestEnvelope(reports: [], hiddenStoredFileNames: [])
+        }
+
+        let data = try Data(contentsOf: manifestURL)
+
+        if let manifest = try? JSONDecoder.pretty.decode(ManifestEnvelope.self, from: data) {
+            return manifest
+        }
+
+        let reports = try JSONDecoder.pretty.decode([ImportedReport].self, from: data)
+        return ManifestEnvelope(reports: reports, hiddenStoredFileNames: [])
+    }
+
+    private static func reconcileManifestReportsWithStoredFiles(
+        _ manifestReports: [ImportedReport],
+        hiddenStoredFileNames: Set<String>
+    ) throws -> [ImportedReport] {
         let fileManager = FileManager.default
         let storedFileURLs = try fileManager.contentsOfDirectory(
             at: storedReportsDirectory,
@@ -111,6 +138,9 @@ enum ImportedReportStore {
             guard values.isRegularFile == true else { continue }
 
             let storedFileName = fileURL.lastPathComponent
+            if hiddenStoredFileNames.contains(storedFileName) {
+                continue
+            }
             if reportsByStoredName[storedFileName] != nil {
                 continue
             }

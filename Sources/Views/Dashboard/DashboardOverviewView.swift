@@ -4,6 +4,7 @@ import SwiftUI
 struct DashboardOverviewView: View {
     let snapshot: PlanningSnapshot
     let importedInsights: ImportedDeckedBuilderInsights
+    let onRequestImportFocus: (ImportFocus) -> Void
 
     private var decked: [GridItem] {
         [GridItem(.adaptive(minimum: 220), spacing: 16)]
@@ -63,9 +64,14 @@ struct DashboardOverviewView: View {
         return "Bring in sales charts, subscription reports, and legacy analytics exports to replace the seeded assumptions."
     }
 
-    init(snapshot: PlanningSnapshot, importedInsights: ImportedDeckedBuilderInsights = .empty) {
+    init(
+        snapshot: PlanningSnapshot,
+        importedInsights: ImportedDeckedBuilderInsights = .empty,
+        onRequestImportFocus: @escaping (ImportFocus) -> Void = { _ in }
+    ) {
         self.snapshot = snapshot
         self.importedInsights = importedInsights
+        self.onRequestImportFocus = onRequestImportFocus
     }
 
     var body: some View {
@@ -156,11 +162,26 @@ struct DashboardOverviewView: View {
                 SectionCard(title: "Coverage Breakdown", subtitle: "Which core metrics are imported right now") {
                     VStack(alignment: .leading, spacing: 10) {
                         ForEach(importedInsights.coverageItems) { item in
-                            Label(
-                                item.title,
-                                systemImage: item.isImported ? "checkmark.circle.fill" : "circle.dashed"
-                            )
-                            .foregroundStyle(item.isImported ? .green : .secondary)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Label(
+                                    item.title,
+                                    systemImage: item.isImported ? "checkmark.circle.fill" : "circle.dashed"
+                                )
+                                .foregroundStyle(item.isImported ? .green : .secondary)
+
+                                if !item.isImported {
+                                    Button {
+                                        onRequestImportFocus(item.importFocus)
+                                    } label: {
+                                        Text(item.recommendation)
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                            .multilineTextAlignment(.leading)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .padding(.leading, 24)
+                                }
+                            }
                         }
                     }
                     .font(.subheadline)

@@ -16,7 +16,8 @@ struct FounderDashboardRootView: View {
             case .dashboard:
                 DashboardOverviewView(
                     snapshot: model.snapshot,
-                    importedInsights: model.importedDeckedBuilderInsights
+                    importedInsights: model.importedDeckedBuilderInsights,
+                    onRequestImportFocus: model.openImports(focus:)
                 )
             case .deckedBuilder:
                 DeckedBuilderView(
@@ -24,7 +25,12 @@ struct FounderDashboardRootView: View {
                     importedInsights: model.importedDeckedBuilderInsights
                 )
             case .lgsFunding:
-                LGSFundingView(snapshot: model.snapshot.funding)
+                LGSFundingView(
+                    snapshot: model.snapshot.funding,
+                    launchChecklistTasks: model.launchChecklistTasks,
+                    completedTaskIDs: model.completedLaunchChecklistTaskIDs,
+                    onToggleTask: model.toggleLaunchChecklistTask(_:)
+                )
             case .imports:
                 ImportsView(model: model)
             case .documents:

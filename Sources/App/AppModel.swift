@@ -1,9 +1,29 @@
 import Foundation
 import Observation
 
+enum ImportFocus: String, Hashable, Identifiable {
+    case salesChart
+    case subscriptionReport
+    case legacyIOSDownloads
+    case legacyIOSActiveDevices
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .salesChart: "Sales Chart"
+        case .subscriptionReport: "Subscription Report"
+        case .legacyIOSDownloads: "Legacy iOS First-Time Downloads"
+        case .legacyIOSActiveDevices: "Legacy iOS Active Devices"
+        }
+    }
+}
+
 @MainActor
 @Observable
 final class AppModel {
+    private static let completedChecklistDefaultsKey = "FounderDashboard.completedLaunchChecklistTaskIDs"
+
     enum Section: String, CaseIterable, Hashable, Identifiable {
         case dashboard
         case deckedBuilder
@@ -42,10 +62,23 @@ final class AppModel {
     var importedReports: [ImportedReport] = []
     var importedDeckedBuilderInsights = ImportedDeckedBuilderInsights.empty
     var importStatusMessage: String?
+    var importFocus: ImportFocus?
+    var completedLaunchChecklistTaskIDs: Set<String>
+
+    var launchChecklistTasks: [LaunchChecklistTask] {
+        LaunchChecklistTask.starterTasks
+    }
+
+    var completedLaunchChecklistCount: Int {
+        launchChecklistTasks.filter { completedLaunchChecklistTaskIDs.contains($0.id) }.count
+    }
 
     init(snapshot: PlanningSnapshot = AppModel.loadSnapshot()) {
         self.snapshot = snapshot
         self.importedReports = (try? ImportedReportStore.load()) ?? []
+        self.completedLaunchChecklistTaskIDs = Set(
+            UserDefaults.standard.stringArray(forKey: Self.completedChecklistDefaultsKey) ?? []
+        )
         self.importedDeckedBuilderInsights = ImportedReportAnalyzer.analyze(
             self.importedReports,
             baselineMonthlyOpsCost: snapshot.deckedBuilder.baselineMonthlyOpsCost
@@ -71,15 +104,33 @@ final class AppModel {
         }
     }
 
-    func deleteImportedReport(_ report: ImportedReport) {
+    func forgetImportedReport(_ report: ImportedReport) {
         do {
-            try ImportedReportStore.delete(report)
+            try ImportedReportStore.forget(report)
             importedReports = try ImportedReportStore.load()
             refreshImportedInsights()
-            importStatusMessage = "Removed \(report.originalFileName)."
+            importStatusMessage = "Removed the import reference for \(report.originalFileName)."
         } catch {
             importStatusMessage = error.localizedDescription
         }
+    }
+
+    func openImports(focus: ImportFocus) {
+        importFocus = focus
+        selectedSection = .imports
+    }
+
+    func toggleLaunchChecklistTask(_ task: LaunchChecklistTask) {
+        if completedLaunchChecklistTaskIDs.contains(task.id) {
+            completedLaunchChecklistTaskIDs.remove(task.id)
+        } else {
+            completedLaunchChecklistTaskIDs.insert(task.id)
+        }
+
+        UserDefaults.standard.set(
+            Array(completedLaunchChecklistTaskIDs).sorted(),
+            forKey: Self.completedChecklistDefaultsKey
+        )
     }
 
     private func refreshImportedInsights() {

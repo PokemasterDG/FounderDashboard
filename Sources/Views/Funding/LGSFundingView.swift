@@ -3,13 +3,28 @@ import SwiftUI
 
 struct LGSFundingView: View {
     let snapshot: FundingSnapshot
+    let launchChecklistTasks: [LaunchChecklistTask]
+    let completedTaskIDs: Set<String>
+    let onToggleTask: (LaunchChecklistTask) -> Void
 
     private var columns: [GridItem] {
         [GridItem(.adaptive(minimum: 220), spacing: 16)]
     }
 
-    init(snapshot: FundingSnapshot) {
+    private var checklistCompletionText: String {
+        "\(completedTaskIDs.count) of \(launchChecklistTasks.count) launch-critical tasks complete"
+    }
+
+    init(
+        snapshot: FundingSnapshot,
+        launchChecklistTasks: [LaunchChecklistTask] = [],
+        completedTaskIDs: Set<String> = [],
+        onToggleTask: @escaping (LaunchChecklistTask) -> Void = { _ in }
+    ) {
         self.snapshot = snapshot
+        self.launchChecklistTasks = launchChecklistTasks
+        self.completedTaskIDs = completedTaskIDs
+        self.onToggleTask = onToggleTask
     }
 
     var body: some View {
@@ -117,6 +132,40 @@ struct LGSFundingView: View {
                         }
                     }
                 }
+
+                SectionCard(title: "Launch Checklist", subtitle: checklistCompletionText) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        ForEach(launchChecklistTasks) { task in
+                            Button {
+                                onToggleTask(task)
+                            } label: {
+                                HStack(alignment: .top, spacing: 12) {
+                                    Image(systemName: completedTaskIDs.contains(task.id) ? "checkmark.circle.fill" : "circle")
+                                        .foregroundStyle(completedTaskIDs.contains(task.id) ? .green : .secondary)
+
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(task.title)
+                                            .font(.headline)
+                                            .foregroundStyle(.primary)
+
+                                        Text(task.detail)
+                                            .font(.subheadline)
+                                            .foregroundStyle(.secondary)
+                                    }
+
+                                    Spacer(minLength: 0)
+                                }
+                                .padding(12)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .fill(Color.secondary.opacity(0.08))
+                                }
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
             }
             .padding(24)
         }
@@ -125,6 +174,10 @@ struct LGSFundingView: View {
 }
 
 #Preview {
-    LGSFundingView(snapshot: AppModel().snapshot.funding)
+    LGSFundingView(
+        snapshot: AppModel().snapshot.funding,
+        launchChecklistTasks: AppModel().launchChecklistTasks,
+        completedTaskIDs: AppModel().completedLaunchChecklistTaskIDs
+    )
         .frame(width: 1200, height: 900)
 }
